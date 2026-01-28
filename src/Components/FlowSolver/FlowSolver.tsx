@@ -135,8 +135,8 @@ const FlowSolver = () => {
     return (
         <main className='flex flex-col justify-center items-center h-screen px-4 py-6 bg-stoic-bg overflow-hidden'>
             {/* Header with clear hierarchy */}
-            <header className='mb-6 text-center'>
-                <h1 className='text-stoic-primary text-xl md:text-2xl uppercase tracking-[0.25em] font-bold'>
+            <header className='mb-8 text-center'>
+                <h1 className='text-stoic-primary text-2xl md:text-3xl uppercase tracking-[0.15em] font-bold'>
                     Flow Free Solver
                 </h1>
             </header>
@@ -144,10 +144,10 @@ const FlowSolver = () => {
             {/* Grid - flat brutalist */}
             <div
                 className="flex flex-col bg-stoic-line border-2 border-stoic-line"
-                style={{ gap: '2px' }}
+                style={{ gap: '3px' }}
             >
                 {Array.from({ length: size }).map((_, y) => (
-                    <div key={y} className="flex" style={{ gap: '2px' }}>
+                    <div key={y} className="flex" style={{ gap: '3px' }}>
                         {Array.from({ length: size }).map((_, x) => {
                             const cellValue = currentBoard[x]?.[y] ?? 0;
                             const hasColor = cellValue !== 0;
@@ -158,7 +158,7 @@ const FlowSolver = () => {
                                     type="button"
                                     className={`
                                         group
-                                        w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12
+                                        w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14
                                         bg-stoic-block-bg
                                         p-0 m-0 appearance-none cursor-pointer 
                                         flex items-center justify-center 
@@ -170,12 +170,12 @@ const FlowSolver = () => {
                                 >
                                     {hasColor ? (
                                         <span
-                                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full"
+                                            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full"
                                             style={{ backgroundColor: COLORS[cellValue] || '#888' }}
                                         />
                                     ) : !solvedBoard && (
                                         <span
-                                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-75"
+                                            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-75"
                                             style={{ backgroundColor: COLORS[activeColor] || '#888' }}
                                         />
                                     )}
@@ -187,19 +187,19 @@ const FlowSolver = () => {
             </div>
 
             {/* Status indicator - contextual feedback */}
-            <div className='mt-5 flex items-center gap-2'>
+            <div className='mt-6 flex items-center gap-3'>
                 {solvedBoard ? (
                     <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold'>
                         ✓ Solved
                     </span>
                 ) : (
                     <>
-                        <span className='text-stoic-secondary text-xs uppercase tracking-wider'>Next</span>
+                        <span className='text-stoic-secondary text-sm uppercase tracking-wider'>Next</span>
                         <span
                             className="w-5 h-5 rounded-full"
                             style={{ backgroundColor: COLORS[activeColor] || '#888' }}
                         />
-                        <span className='text-stoic-secondary text-xs uppercase tracking-wider'>
+                        <span className='text-stoic-secondary text-sm uppercase tracking-wider'>
                             {isPlacingSecond ? '2nd' : '1st'}
                         </span>
                     </>
@@ -207,10 +207,10 @@ const FlowSolver = () => {
             </div>
 
             {/* Controls - clear action hierarchy */}
-            <div className="flex items-center gap-2 mt-5">
+            <div className="flex items-center gap-3 mt-6">
                 <div className="relative">
                     <select
-                        className='h-10 pl-3 pr-8 text-xs border-2 border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                        className='h-11 pl-3 pr-8 text-sm border-2 border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
                         value={size}
                         onChange={handleSizeChange}
                     >
@@ -218,18 +218,18 @@ const FlowSolver = () => {
                             <option key={option} value={option}>{option}×{option}</option>
                         ))}
                     </select>
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-xs">▼</span>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-sm">▼</span>
                 </div>
 
                 <button
-                    className='h-10 px-5 text-xs border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors'
+                    className='h-11 px-6 text-sm border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors'
                     onClick={solveBoard}
                 >
                     Solve
                 </button>
 
                 <button
-                    className='h-10 px-4 text-xs border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors'
+                    className='h-11 px-5 text-sm border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors'
                     onClick={() => resetBoard()}
                 >
                     Reset
