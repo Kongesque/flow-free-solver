@@ -382,19 +382,29 @@ const solveBoard = (board: Board): [Board | null, number, number] => {
   }
 }
 
-export const solve = (board: any) => {
+export type SolveResult = {
+  board: Board | null;
+  timedOut: boolean;
+  timeTaken: number;
+  nodeCount: number;
+};
+
+export const solve = (board: any): SolveResult => {
   try {
     // Validate input board
-    if (!board || board.length === 0) return null;
+    if (!board || board.length === 0) {
+      return { board: null, timedOut: false, timeTaken: 0, nodeCount: 0 };
+    }
 
     // Ensure board is number[][]
     // The component passes number[][] so it's fine.
 
     const [solvedBoard, finalNodeCount, timeTaken] = solveBoard(board);
+    const timedOut = solvedBoard === null && timeTaken >= 14900; // ~15s timeout
     console.log(`Solved in ${timeTaken.toFixed(2)}ms, nodes: ${finalNodeCount}`);
-    return solvedBoard;
+    return { board: solvedBoard, timedOut, timeTaken, nodeCount: finalNodeCount };
   } catch (error: any) {
     console.error(error);
-    return null;
+    return { board: null, timedOut: false, timeTaken: 0, nodeCount: 0 };
   }
 };

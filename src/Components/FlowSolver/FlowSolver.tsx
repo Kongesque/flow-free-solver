@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { solve } from './Solver.tsx';
 
 const FlowSolver = () => {
     const defaultSize = 5;
@@ -30,12 +29,15 @@ const FlowSolver = () => {
     // UX: Track current color being placed and whether we're placing first or second endpoint
     const [activeColor, setActiveColor] = useState(1);
     const [isPlacingSecond, setIsPlacingSecond] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isSolving, setIsSolving] = useState(false);
 
     const resetBoard = useCallback((newSize: number = size) => {
         setBoard(initializeBoard(newSize));
         setSolvedBoard(null);
         setActiveColor(1);
         setIsPlacingSecond(false);
+        setError(null);
     }, [size]);
 
     const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -116,17 +118,44 @@ const FlowSolver = () => {
     }, [board, solvedBoard, activeColor]);
 
     const solveBoard = async () => {
-        // Run solve async to avoid blocking UI immediately (though logic is sync, React batching helps)
-        // With heavy computation, ideally use Web Worker, but for now just function call.
-        // We can wrap in setTimeout to allow render before freeze.
-        setTimeout(() => {
-            const solved = solve(board);
-            if (solved) {
-                setSolvedBoard(solved);
+        // Clear any previous error and set loading
+        setError(null);
+        setIsSolving(true);
+
+        // Use Web Worker to run solver in background thread
+        // This keeps CSS animations responsive
+        const worker = new Worker(
+            new URL('./solver.worker.ts', import.meta.url),
+            { type: 'module' }
+        );
+
+        worker.onmessage = (event) => {
+            const result = event.data;
+            setIsSolving(false);
+            worker.terminate();
+
+            if (result.board) {
+                setSolvedBoard(result.board);
+            } else if (result.timedOut) {
+                setError('Timed out (15s limit)');
+                // Auto-dismiss error after 4 seconds
+                setTimeout(() => setError(null), 4000);
             } else {
-                alert("No solution found!");
+                setError('No solution found');
+                // Auto-dismiss error after 3 seconds
+                setTimeout(() => setError(null), 3000);
             }
-        }, 10);
+        };
+
+        worker.onerror = (error) => {
+            console.error('Worker error:', error);
+            setIsSolving(false);
+            setError('Solver error');
+            setTimeout(() => setError(null), 3000);
+            worker.terminate();
+        };
+
+        worker.postMessage(board);
     };
 
     // Declarative Board Rendering
@@ -187,8 +216,22 @@ const FlowSolver = () => {
             </div>
 
             {/* Status indicator - contextual feedback */}
-            <div className='mt-6 flex items-center gap-3'>
-                {solvedBoard ? (
+            <div className='mt-6 flex items-center gap-3 min-h-[28px]'>
+                {isSolving ? (
+                    <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold flex items-center gap-2'>
+                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                            <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                        Solving…
+                    </span>
+                ) : error ? (
+                    <span className='text-sm uppercase tracking-widest font-semibold animate-pulse'
+                        style={{ color: '#FF3B30' }}
+                    >
+                        ✗ {error}
+                    </span>
+                ) : solvedBoard ? (
                     <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold'>
                         ✓ Solved
                     </span>
@@ -222,10 +265,17 @@ const FlowSolver = () => {
                 </div>
 
                 <button
-                    className='h-11 px-6 text-sm border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors'
+                    className='h-11 px-6 text-sm border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg flex items-center gap-2'
                     onClick={solveBoard}
+                    disabled={isSolving}
                 >
-                    Solve
+                    {isSolving && (
+                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                            <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                    )}
+                    {isSolving ? 'Solving' : 'Solve'}
                 </button>
 
                 <button
