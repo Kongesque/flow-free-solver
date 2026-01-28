@@ -83,8 +83,10 @@ const Flow = () => {
     const currentBoard = solvedBoard || board;
 
     return (
-        <div className='container'>
-            <h1 className='title'>Flow Free Solver</h1>
+        <main className='container'>
+            <header>
+                <h1 className='title'>Flow Free Solver</h1>
+            </header>
 
 
 
@@ -92,13 +94,15 @@ const Flow = () => {
                 {Array.from({ length: size }).map((_, y) => (
                     <div key={y} className={`row${y + 1}`}>
                         {Array.from({ length: size }).map((_, x) => (
-                            <div
+                            <button
                                 key={x}
+                                type="button"
                                 className="boxes"
                                 onClick={() => !solvedBoard && handleCellClick(x, y)}
+                                aria-label={`Cell ${x},${y} ${currentBoard[x] && currentBoard[x][y] !== 0 ? `Color ${currentBoard[x][y]}` : 'Empty'}`}
                             >
                                 {currentBoard[x] && currentBoard[x][y] !== 0 ? currentBoard[x][y] : ''}
-                            </div>
+                            </button>
                         ))}
                     </div>
                 ))}
@@ -114,7 +118,7 @@ const Flow = () => {
                 <button className='solve' onClick={solveBoard}>Solve</button>
                 <button className='reset' onClick={() => resetBoard()}>Reset</button>
             </div>
-        </div>
+        </main>
     );
 };
 
