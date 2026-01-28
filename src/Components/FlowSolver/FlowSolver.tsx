@@ -194,7 +194,7 @@ const FlowSolver = () => {
                     </span>
                 ) : (
                     <>
-                        <span className='text-stoic-secondary text-sm uppercase tracking-wider'>Next</span>
+                        <span className='text-stoic-secondary text-sm uppercase tracking-wider'>Place</span>
                         <span
                             className="w-5 h-5 rounded-full"
                             style={{ backgroundColor: COLORS[activeColor] || '#888' }}
@@ -210,7 +210,7 @@ const FlowSolver = () => {
             <div className="flex items-center gap-3 mt-6">
                 <div className="relative">
                     <select
-                        className='h-11 pl-3 pr-8 text-sm border-2 border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                        className='h-11 pl-3 pr-8 text-sm border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
                         value={size}
                         onChange={handleSizeChange}
                     >
