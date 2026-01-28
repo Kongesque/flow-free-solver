@@ -1,8 +1,21 @@
 # Flow Free Solver
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://kongesque.github.io/flow-free-solver/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite)](https://vitejs.dev/)
+
 Flow Free, also know as Number Link, is a widely popular puzzle game that challenges players to connect pairs of colored dots on a grid. The goal is to draw paths between each pair of dots such that the paths do not overlap, and the entire grid is occupied. Players must connect dots of the same color while ensuring paths do not cross.
 
 The Flow Free Solver project employs a backtracking approach with Breadth-First Search (BFS) and A* algorithm heuristics to solve Flow-Free puzzles by connecting pairs of colored dots. I also includes an alternative SAT Solver approach for additional solving flexibility.
+
+## ✨ Features
+
+- **Interactive Grid Editor** — Click to place and remove numbered pairs on grids from 5×5 to 10×10
+- **Solver Algorithms** — BFS/A* backtracking based solver
+- **Web Worker Execution** — Non-blocking solver runs in background thread for responsive UI
+- **Visual Solution Paths** — Animated path rendering with color-coded connections
+
+---
 
 ## Solver Method 1: Backtracking with BFS and A* Algorithm
 
@@ -14,7 +27,7 @@ This approach explores paths recursively to connect pairs of dots, with the foll
 
 ## Solver Method 2: SAT Solver Approach
 
-This approach frames Flow Free as a Constraint Satisfaction Problem (CSP) and translates game requirements into logical formulas suitable for SAT solvers, such as the Z3 solver in Python. The SAT solver leverages constraints to ensure all puzzle requirements are met. Here’s how the constraints are structured:
+This approach frames Flow Free as a Constraint Satisfaction Problem (CSP) and translates game requirements into logical formulas suitable for SAT solvers, such as the Z3 solver in Python. The SAT solver leverages constraints to ensure all puzzle requirements are met. Here's how the constraints are structured:
 
 - **Single-Color Cell Requirement**: Each cell on the grid must contain only one color, ensuring there are no overlaps. This is expressed as:
 
@@ -38,8 +51,14 @@ Cell_{ij} = N_{ij} = 2 \text{ or } N_{ij} = 0, \text{ if } Cell_{ij} = 0
 $$
 
   where $N_{ij}$ represents the cell's neighbors, determined by Manhattan distance. This constraint ensures that paths are continuous without overlapping.
+
+---
   
-## Setup Instructions
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm
 
 ### 1. Clone the Repository
 ```bash
@@ -53,15 +72,20 @@ npm install
 ```
 
 ### 3. Available Commands
-- **Start Development Mode:** Run the app locally at http://localhost:3000
-     ```bash
-     npm start
-     ```
-- **Build for Production:** Create a production-ready build in the `build` folder
-     ```bash
-     npm run build
-     ```
 
-## Deployment
+| Command | Description |
+|---------|-------------|
+| `npm start` | Start development server at http://localhost:5173 |
+| `npm run build` | Build production bundle to `dist/` |
+| `npm run preview` | Preview production build locally |
+| `npm run deploy` | Deploy to GitHub Pages |
 
-The Flow-Free-Solver project is deployed at: [https://kongesque.github.io/Flow-Free-Solver/](https://kongesque.github.io/Flow-Free-Solver/)
+## 🌐 Deployment
+
+The Flow-Free-Solver project is deployed at: **[https://kongesque.github.io/flow-free-solver/](https://kongesque.github.io/flow-free-solver/)**
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).

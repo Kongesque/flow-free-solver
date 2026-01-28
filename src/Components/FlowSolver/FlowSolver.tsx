@@ -252,7 +252,7 @@ const FlowSolver = () => {
                     </span>
                 ) : (
                     <>
-                        <span className='text-stoic-secondary text-sm uppercase tracking-wider'>Place</span>
+                        <span className='text-stoic-secondary text-sm uppercase tracking-wider'>Put</span>
                         <span
                             className="w-5 h-5 rounded-full"
                             style={{ backgroundColor: COLORS[activeColor] || '#888' }}
