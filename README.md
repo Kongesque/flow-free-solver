@@ -1,5 +1,7 @@
 # Flow Free Solver
 
+![Flow Free Solver Demo](./assets/freeflow.gif)
+
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://kongesque.github.io/flow-free-solver/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite)](https://vitejs.dev/)

@@ -4,7 +4,7 @@ const FlowSolver = () => {
     const defaultSize = 5;
     const sizeOptions = [5, 6, 7, 8, 9, 10];
 
-    // Vibrant brutalist color palette
+    // Vibrant color palette
     const COLORS: Record<number, string> = {
         1: '#FF3B30',  // Red
         2: '#007AFF',  // Blue
