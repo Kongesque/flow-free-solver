@@ -157,6 +157,7 @@ const FlowSolver = () => {
                                     key={x}
                                     type="button"
                                     className={`
+                                        group
                                         w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12
                                         bg-stoic-block-bg
                                         p-0 m-0 appearance-none cursor-pointer 
@@ -167,10 +168,15 @@ const FlowSolver = () => {
                                     onClick={() => !solvedBoard && handleCellClick(x, y)}
                                     aria-label={`Cell ${x},${y} ${hasColor ? `Color ${cellValue}` : 'Empty'}`}
                                 >
-                                    {hasColor && (
+                                    {hasColor ? (
                                         <span
                                             className="w-7 h-7 sm:w-8 sm:h-8 rounded-full"
                                             style={{ backgroundColor: COLORS[cellValue] || '#888' }}
+                                        />
+                                    ) : !solvedBoard && (
+                                        <span
+                                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-75"
+                                            style={{ backgroundColor: COLORS[activeColor] || '#888' }}
                                         />
                                     )}
                                 </button>
