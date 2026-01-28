@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Flow from './Components/Flow/Flow.tsx';
 
