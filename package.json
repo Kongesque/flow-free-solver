@@ -1,5 +1,5 @@
 {
-  "homepage": "https://Kongesque.github.io/Flow-Free-Solver",
+  "homepage": "https://kongesque.github.io/flow-free-solver",
   "name": "app",
   "version": "0.1.0",
   "private": true,
@@ -19,6 +19,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
   "eslintConfig": {
