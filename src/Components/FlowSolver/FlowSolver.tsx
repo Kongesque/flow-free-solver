@@ -164,10 +164,18 @@ const FlowSolver = () => {
     return (
         <main className='flex flex-col justify-center items-center min-h-screen min-h-[100dvh] px-4 py-6 bg-stoic-bg overflow-hidden safe-area-inset touch-manipulation'>
             {/* Header with clear hierarchy */}
-            <header className='mb-4 sm:mb-6 md:mb-8 text-center'>
+            <header className='mb-4 sm:mb-6 md:mb-8 text-center flex flex-col items-center gap-2'>
                 <h1 className='text-stoic-primary text-lg sm:text-xl md:text-2xl lg:text-3xl uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold'>
                     Flow Free Solver
                 </h1>
+                <a
+                    href="https://github.com/Kongesque/flow-free-solver"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-stoic-secondary hover:underline hover:text-stoic-accent transition-colors text-xs uppercase tracking-widest font-medium group"
+                >
+                    Source Code
+                </a>
             </header>
 
             {/* Grid - flat brutalist, responsive cell sizes */}
