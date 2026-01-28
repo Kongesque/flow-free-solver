@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import './Flow.css';
+import React, { useState, useCallback } from 'react';
 import { solve } from './Solver.tsx';
 
-const Flow = () => {
+const FlowSolver = () => {
     const defaultSize = 5;
     const sizeOptions = [5, 6, 7, 8, 9, 10];
 
@@ -83,21 +82,19 @@ const Flow = () => {
     const currentBoard = solvedBoard || board;
 
     return (
-        <main className='container'>
+        <main className='flex flex-col justify-center items-center min-h-screen p-5 bg-slate-100'>
             <header>
-                <h1 className='title'>Flow Free Solver</h1>
+                <h1 className='text-slate-800 text-4xl mb-8 text-center'>Flow Free Solver</h1>
             </header>
 
-
-
-            <div className="board">
+            <div className="flex flex-col gap-[2px] bg-slate-400 p-[2px] rounded-lg shadow-md">
                 {Array.from({ length: size }).map((_, y) => (
-                    <div key={y} className={`row${y + 1}`}>
+                    <div key={y} className="flex gap-[2px]">
                         {Array.from({ length: size }).map((_, x) => (
                             <button
                                 key={x}
                                 type="button"
-                                className="boxes"
+                                className={`h-[60px] w-[60px] bg-white border border-slate-300 p-0 m-0 appearance-none font-bold text-xl cursor-pointer flex items-center justify-center transition-colors hover:bg-gray-200`}
                                 onClick={() => !solvedBoard && handleCellClick(x, y)}
                                 aria-label={`Cell ${x},${y} ${currentBoard[x] && currentBoard[x][y] !== 0 ? `Color ${currentBoard[x][y]}` : 'Empty'}`}
                             >
@@ -108,18 +105,32 @@ const Flow = () => {
                 ))}
             </div>
 
-            <div className="control">
-                <select className='size-dropdown' value={size} onChange={handleSizeChange}>
+            <div className="flex gap-4 mt-8">
+                <select
+                    className='p-2.5 text-base border border-slate-300 rounded-md bg-white text-slate-800 transition-all duration-300'
+                    value={size}
+                    onChange={handleSizeChange}
+                >
                     {sizeOptions.map(option => (
                         <option key={option} value={option}>{option}x{option}</option>
                     ))}
                 </select>
 
-                <button className='solve' onClick={solveBoard}>Solve</button>
-                <button className='reset' onClick={() => resetBoard()}>Reset</button>
+                <button
+                    className='py-2.5 px-5 text-base border-none rounded-md cursor-pointer transition-all duration-300 text-white font-bold bg-sky-500 hover:opacity-90 hover:-translate-y-0.5'
+                    onClick={solveBoard}
+                >
+                    Solve
+                </button>
+                <button
+                    className='py-2.5 px-5 text-base border-none rounded-md cursor-pointer transition-all duration-300 text-white font-bold bg-slate-800 hover:opacity-90 hover:-translate-y-0.5'
+                    onClick={() => resetBoard()}
+                >
+                    Reset
+                </button>
             </div>
         </main>
     );
 };
 
-export default Flow;
+export default FlowSolver;

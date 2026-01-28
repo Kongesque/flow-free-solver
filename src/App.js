@@ -1,11 +1,11 @@
-import './App.css';
-import Flow from './Components/Flow/Flow.tsx';
+
+import FlowSolver from './Components/FlowSolver/FlowSolver.tsx';
 
 
 function App() {
   return (
-    <div>
-      <Flow />
+    <div className="text-center">
+      <FlowSolver />
     </div>
   );
 }
