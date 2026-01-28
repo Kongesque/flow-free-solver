@@ -2,14 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile viewport fix for iOS Safari */
+html {
+  height: -webkit-fill-available;
+}
+
 body {
   margin: 0;
   font-family: 'JetBrains Mono', monospace;
   background-color: #151716;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  /* Prevent pull-to-refresh on mobile */
+  overscroll-behavior: none;
 }
 
 code {
   font-family: 'JetBrains Mono', monospace;
+}
+
+/* Safe area support for notched devices (iPhone X+) */
+.safe-area-inset {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Touch optimization - prevents 300ms delay and double-tap zoom */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
 }

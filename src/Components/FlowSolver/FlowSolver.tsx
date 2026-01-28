@@ -162,24 +162,38 @@ const FlowSolver = () => {
     const currentBoard = solvedBoard || board;
 
     return (
-        <main className='flex flex-col justify-center items-center h-screen px-4 py-6 bg-stoic-bg overflow-hidden'>
+        <main className='flex flex-col justify-center items-center min-h-screen min-h-[100dvh] px-4 py-6 bg-stoic-bg overflow-hidden safe-area-inset touch-manipulation'>
             {/* Header with clear hierarchy */}
-            <header className='mb-8 text-center'>
-                <h1 className='text-stoic-primary text-2xl md:text-3xl uppercase tracking-[0.15em] font-bold'>
+            <header className='mb-4 sm:mb-6 md:mb-8 text-center'>
+                <h1 className='text-stoic-primary text-lg sm:text-xl md:text-2xl lg:text-3xl uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold'>
                     Flow Free Solver
                 </h1>
             </header>
 
-            {/* Grid - flat brutalist */}
+            {/* Grid - flat brutalist, responsive cell sizes */}
             <div
                 className="flex flex-col bg-stoic-line border-2 border-stoic-line"
-                style={{ gap: '3px' }}
+                style={{ gap: '2px' }}
             >
                 {Array.from({ length: size }).map((_, y) => (
-                    <div key={y} className="flex" style={{ gap: '3px' }}>
+                    <div key={y} className="flex" style={{ gap: '2px' }}>
                         {Array.from({ length: size }).map((_, x) => {
                             const cellValue = currentBoard[x]?.[y] ?? 0;
                             const hasColor = cellValue !== 0;
+
+                            // Dynamic cell size based on grid size for mobile fit
+                            // Smaller grids = larger cells, larger grids = smaller cells
+                            const cellSizeClass = size <= 6
+                                ? 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16'
+                                : size <= 8
+                                    ? 'w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14'
+                                    : 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12';
+
+                            const circleSizeClass = size <= 6
+                                ? 'w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12'
+                                : size <= 8
+                                    ? 'w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10'
+                                    : 'w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8';
 
                             return (
                                 <button
@@ -187,24 +201,25 @@ const FlowSolver = () => {
                                     type="button"
                                     className={`
                                         group
-                                        w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14
+                                        ${cellSizeClass}
                                         bg-stoic-block-bg
                                         p-0 m-0 appearance-none cursor-pointer 
                                         flex items-center justify-center 
                                         transition-all duration-150
-                                        ${solvedBoard ? 'cursor-default' : 'hover:bg-stoic-block-hover active:scale-95'}
+                                        touch-manipulation
+                                        ${solvedBoard ? 'cursor-default' : 'hover:bg-stoic-block-hover active:scale-95 active:bg-stoic-block-hover'}
                                     `}
                                     onClick={() => !solvedBoard && handleCellClick(x, y)}
                                     aria-label={`Cell ${x},${y} ${hasColor ? `Color ${cellValue}` : 'Empty'}`}
                                 >
                                     {hasColor ? (
                                         <span
-                                            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full"
+                                            className={`${circleSizeClass} rounded-full`}
                                             style={{ backgroundColor: COLORS[cellValue] || '#888' }}
                                         />
                                     ) : !solvedBoard && (
                                         <span
-                                            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-75"
+                                            className={`${circleSizeClass} rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-75`}
                                             style={{ backgroundColor: COLORS[activeColor] || '#888' }}
                                         />
                                     )}
@@ -249,11 +264,11 @@ const FlowSolver = () => {
                 )}
             </div>
 
-            {/* Controls - clear action hierarchy */}
-            <div className="flex items-center gap-3 mt-6">
+            {/* Controls - responsive layout */}
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-6">
                 <div className="relative">
                     <select
-                        className='h-11 pl-3 pr-8 text-sm border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                        className='h-10 sm:h-11 pl-3 pr-8 text-xs sm:text-sm border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
                         value={size}
                         onChange={handleSizeChange}
                     >
@@ -261,16 +276,16 @@ const FlowSolver = () => {
                             <option key={option} value={option}>{option}×{option}</option>
                         ))}
                     </select>
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-sm">▼</span>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-xs sm:text-sm">▼</span>
                 </div>
 
                 <button
-                    className='h-11 px-6 text-sm border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg flex items-center gap-2'
+                    className='h-10 sm:h-11 px-4 sm:px-6 text-xs sm:text-sm border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg flex items-center gap-2'
                     onClick={solveBoard}
                     disabled={isSolving}
                 >
                     {isSolving && (
-                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                        <svg className="animate-spin h-3 w-3 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
                             <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
@@ -279,7 +294,7 @@ const FlowSolver = () => {
                 </button>
 
                 <button
-                    className='h-11 px-5 text-sm border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors'
+                    className='h-10 sm:h-11 px-3 sm:px-5 text-xs sm:text-sm border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors'
                     onClick={() => resetBoard()}
                 >
                     Reset
