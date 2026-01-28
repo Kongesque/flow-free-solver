@@ -162,7 +162,7 @@ const FlowSolver = () => {
     const currentBoard = solvedBoard || board;
 
     return (
-        <main className='flex flex-col justify-center items-center min-h-screen min-h-[100dvh] px-4 py-6 bg-stoic-bg overflow-hidden safe-area-inset touch-manipulation'>
+        <main className='flex flex-col justify-center items-center min-h-screen px-4 py-6 bg-stoic-bg safe-area-inset touch-manipulation overflow-auto'>
             {/* Header with clear hierarchy */}
             <header className='mb-4 sm:mb-6 md:mb-8 text-center flex flex-col items-center gap-2 selectable-text'>
                 <h1 className='text-stoic-primary text-lg sm:text-xl md:text-2xl lg:text-3xl uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold'>
