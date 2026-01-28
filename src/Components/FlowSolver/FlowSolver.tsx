@@ -282,7 +282,7 @@ const FlowSolver = () => {
                     <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-xs sm:text-sm">▼</span>
                 </div>
 
-                 <button
+                <button
                     className='h-10 sm:h-11 px-4 sm:px-6 text-xs sm:text-sm border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg select-none flex items-center gap-2'
                     onClick={solveBoard}
                     disabled={isSolving}
@@ -296,7 +296,7 @@ const FlowSolver = () => {
                     {isSolving ? 'Solving' : 'Solve'}
                 </button>
 
-                 <button
+                <button
                     className='h-10 sm:h-11 px-3 sm:px-5 text-xs sm:text-sm border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors select-none'
                     onClick={() => resetBoard()}
                 >
@@ -309,11 +309,11 @@ const FlowSolver = () => {
                     Solve Flow Free puzzles (Number Link) instantly using AI algorithms: backtracking, BFS, and A*. Connect colored dots without crossing paths.
                 </p>
                 <p className="mb-2">
-                    This free online Flow Free solver handles puzzles from 5×5 to 10×10 grids. 
+                    This online Flow Free solver handles puzzles from 5×5 to 10×10 grids.
                     Perfect for learning puzzle-solving algorithms or quickly solving challenging Number Link puzzles.
                 </p>
                 <p className="mb-2">
-                    <a href="https://en.wikipedia.org/wiki/Numberlink" target="_blank" rel="noopener noreferrer nofollow" className="underline hover:text-stoic-accent">Learn more about Number Link on Wikipedia</a> • 
+                    <a href="https://en.wikipedia.org/wiki/Numberlink" target="_blank" rel="noopener noreferrer nofollow" className="underline hover:text-stoic-accent">Learn more about Number Link on Wikipedia</a> •
                     <a href="https://github.com/Kongesque/flow-free-solver" target="_blank" rel="noopener noreferrer" className="underline hover:text-stoic-accent ml-1">View source code on GitHub</a>
                 </p>
             </footer>
