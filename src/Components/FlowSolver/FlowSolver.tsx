@@ -133,62 +133,97 @@ const FlowSolver = () => {
     const currentBoard = solvedBoard || board;
 
     return (
-        <main className='flex flex-col justify-center items-center min-h-screen px-6 py-16 bg-stoic-bg'>
-            <header className='mb-8'>
-                <h1 className='text-stoic-primary text-2xl md:text-3xl text-center uppercase tracking-[0.2em] font-bold'>Flow Free Solver</h1>
+        <main className='flex flex-col justify-center items-center h-screen px-4 py-6 bg-stoic-bg overflow-hidden'>
+            {/* Header with clear hierarchy */}
+            <header className='mb-6 text-center'>
+                <h1 className='text-stoic-primary text-xl md:text-2xl uppercase tracking-[0.25em] font-bold'>
+                    Flow Free Solver
+                </h1>
             </header>
 
-            <div className="flex flex-col border border-stoic-line">
+            {/* Grid - flat brutalist */}
+            <div
+                className="flex flex-col bg-stoic-line border-2 border-stoic-line"
+                style={{ gap: '2px' }}
+            >
                 {Array.from({ length: size }).map((_, y) => (
-                    <div key={y} className="flex">
-                        {Array.from({ length: size }).map((_, x) => (
-                            <button
-                                key={x}
-                                type="button"
-                                className={`w-12 h-12 md:w-14 md:h-14 bg-stoic-block-bg border-r border-b border-stoic-line last:border-r-0 p-0 m-0 appearance-none cursor-pointer flex items-center justify-center hover:bg-stoic-block-hover active:bg-stoic-line`}
-                                onClick={() => !solvedBoard && handleCellClick(x, y)}
-                                aria-label={`Cell ${x},${y} ${currentBoard[x] && currentBoard[x][y] !== 0 ? `Color ${currentBoard[x][y]}` : 'Empty'}`}
-                            >
-                                {currentBoard[x] && currentBoard[x][y] !== 0 && (
-                                    <span
-                                        className="w-8 h-8 md:w-9 md:h-9 rounded-full"
-                                        style={{ backgroundColor: COLORS[currentBoard[x][y]] || '#888' }}
-                                    />
-                                )}
-                            </button>
-                        ))}
+                    <div key={y} className="flex" style={{ gap: '2px' }}>
+                        {Array.from({ length: size }).map((_, x) => {
+                            const cellValue = currentBoard[x]?.[y] ?? 0;
+                            const hasColor = cellValue !== 0;
+
+                            return (
+                                <button
+                                    key={x}
+                                    type="button"
+                                    className={`
+                                        w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12
+                                        bg-stoic-block-bg
+                                        p-0 m-0 appearance-none cursor-pointer 
+                                        flex items-center justify-center 
+                                        transition-all duration-150
+                                        ${solvedBoard ? 'cursor-default' : 'hover:bg-stoic-block-hover active:scale-95'}
+                                    `}
+                                    onClick={() => !solvedBoard && handleCellClick(x, y)}
+                                    aria-label={`Cell ${x},${y} ${hasColor ? `Color ${cellValue}` : 'Empty'}`}
+                                >
+                                    {hasColor && (
+                                        <span
+                                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full"
+                                            style={{ backgroundColor: COLORS[cellValue] || '#888' }}
+                                        />
+                                    )}
+                                </button>
+                            );
+                        })}
                     </div>
                 ))}
             </div>
 
-            <p className='text-sm text-center mt-4 uppercase tracking-wide flex items-center justify-center gap-2'>
-                <span className='text-stoic-secondary'>Placing:</span>
-                <span
-                    className="w-4 h-4 rounded-full inline-block"
-                    style={{ backgroundColor: COLORS[activeColor] || '#888' }}
-                />
-                <span className='text-stoic-secondary'>({isPlacingSecond ? '2nd' : '1st'} point)</span>
-            </p>
+            {/* Status indicator - contextual feedback */}
+            <div className='mt-5 flex items-center gap-2'>
+                {solvedBoard ? (
+                    <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold'>
+                        ✓ Solved
+                    </span>
+                ) : (
+                    <>
+                        <span className='text-stoic-secondary text-xs uppercase tracking-wider'>Next</span>
+                        <span
+                            className="w-5 h-5 rounded-full"
+                            style={{ backgroundColor: COLORS[activeColor] || '#888' }}
+                        />
+                        <span className='text-stoic-secondary text-xs uppercase tracking-wider'>
+                            {isPlacingSecond ? '2nd' : '1st'}
+                        </span>
+                    </>
+                )}
+            </div>
 
-            <div className="flex flex-wrap justify-center gap-3 mt-6">
-                <select
-                    className='h-11 px-4 text-sm border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer'
-                    value={size}
-                    onChange={handleSizeChange}
-                >
-                    {sizeOptions.map(option => (
-                        <option key={option} value={option}>{option}×{option}</option>
-                    ))}
-                </select>
+            {/* Controls - clear action hierarchy */}
+            <div className="flex items-center gap-2 mt-5">
+                <div className="relative">
+                    <select
+                        className='h-10 pl-3 pr-8 text-xs border-2 border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                        value={size}
+                        onChange={handleSizeChange}
+                    >
+                        {sizeOptions.map(option => (
+                            <option key={option} value={option}>{option}×{option}</option>
+                        ))}
+                    </select>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-xs">▼</span>
+                </div>
 
                 <button
-                    className='h-11 px-6 text-sm border border-stoic-accent bg-stoic-accent text-stoic-bg font-semibold uppercase tracking-wide hover:bg-transparent hover:text-stoic-accent transition-colors'
+                    className='h-10 px-5 text-xs border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors'
                     onClick={solveBoard}
                 >
                     Solve
                 </button>
+
                 <button
-                    className='h-11 px-6 text-sm border border-stoic-line bg-transparent text-stoic-secondary font-semibold uppercase tracking-wide hover:bg-stoic-line hover:text-stoic-primary transition-colors'
+                    className='h-10 px-4 text-xs border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors'
                     onClick={() => resetBoard()}
                 >
                     Reset
