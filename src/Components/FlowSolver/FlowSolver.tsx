@@ -82,19 +82,19 @@ const FlowSolver = () => {
     const currentBoard = solvedBoard || board;
 
     return (
-        <main className='flex flex-col justify-center items-center min-h-screen p-5 bg-slate-100'>
+        <main className='flex flex-col justify-center items-center min-h-screen p-5 bg-stoic-bg'>
             <header>
-                <h1 className='text-slate-800 text-4xl mb-8 text-center'>Flow Free Solver</h1>
+                <h1 className='text-stoic-primary text-4xl mb-8 text-center uppercase tracking-widest font-black'>Flow Free Solver</h1>
             </header>
 
-            <div className="flex flex-col gap-[2px] bg-slate-400 p-[2px] rounded-lg shadow-md">
+            <div className="flex flex-col gap-[2px] bg-stoic-block-border p-[2px] rounded-lg shadow-2xl">
                 {Array.from({ length: size }).map((_, y) => (
                     <div key={y} className="flex gap-[2px]">
                         {Array.from({ length: size }).map((_, x) => (
                             <button
                                 key={x}
                                 type="button"
-                                className={`h-[60px] w-[60px] bg-white border border-slate-300 p-0 m-0 appearance-none font-bold text-xl cursor-pointer flex items-center justify-center transition-colors hover:bg-gray-200`}
+                                className={`h-[60px] w-[60px] bg-stoic-block-bg border border-stoic-inblock-border p-0 m-0 appearance-none font-bold text-xl cursor-pointer flex items-center justify-center transition-colors hover:bg-stoic-block-hover text-stoic-primary`}
                                 onClick={() => !solvedBoard && handleCellClick(x, y)}
                                 aria-label={`Cell ${x},${y} ${currentBoard[x] && currentBoard[x][y] !== 0 ? `Color ${currentBoard[x][y]}` : 'Empty'}`}
                             >
@@ -107,7 +107,7 @@ const FlowSolver = () => {
 
             <div className="flex gap-4 mt-8">
                 <select
-                    className='p-2.5 text-base border border-slate-300 rounded-md bg-white text-slate-800 transition-all duration-300'
+                    className='p-2.5 text-base border border-stoic-block-border rounded-md bg-stoic-block-bg text-stoic-primary transition-all duration-300 focus:outline-none focus:border-stoic-accent'
                     value={size}
                     onChange={handleSizeChange}
                 >
@@ -117,13 +117,13 @@ const FlowSolver = () => {
                 </select>
 
                 <button
-                    className='py-2.5 px-5 text-base border-none rounded-md cursor-pointer transition-all duration-300 text-white font-bold bg-sky-500 hover:opacity-90 hover:-translate-y-0.5'
+                    className='py-2.5 px-6 text-base border-none rounded-md cursor-pointer transition-all duration-300 text-stoic-bg font-bold bg-stoic-accent hover:bg-stoic-accent-hover hover:-translate-y-0.5 shadow-lg'
                     onClick={solveBoard}
                 >
                     Solve
                 </button>
                 <button
-                    className='py-2.5 px-5 text-base border-none rounded-md cursor-pointer transition-all duration-300 text-white font-bold bg-slate-800 hover:opacity-90 hover:-translate-y-0.5'
+                    className='py-2.5 px-6 text-base border-none rounded-md cursor-pointer transition-all duration-300 text-stoic-primary font-bold bg-stoic-secondary hover:bg-stoic-secondary-hover hover:-translate-y-0.5 shadow-lg'
                     onClick={() => resetBoard()}
                 >
                     Reset

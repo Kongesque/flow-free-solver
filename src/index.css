@@ -5,6 +5,7 @@
 body {
   margin: 0;
   font-family: 'JetBrains Mono', monospace;
+  background-color: #151716;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
