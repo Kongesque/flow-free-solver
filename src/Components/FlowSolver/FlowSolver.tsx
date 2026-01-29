@@ -4,25 +4,24 @@ const FlowSolver = () => {
     const defaultSize = 5;
     const sizeOptions = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
-    // Vibrant color palette
+    // Custom color palette requested by user
     const COLORS: Record<number, string> = {
-        1: '#FF3B30',  // Red
-        2: '#007AFF',  // Blue
-        3: '#34C759',  // Green
-        4: '#FFCC00',  // Yellow
-        5: '#AF52DE',  // Purple
-        6: '#FF9500',  // Orange
-        7: '#00C7BE',  // Teal
-        8: '#FF2D92',  // Pink
-        9: '#5856D6',  // Indigo
-        10: '#A2845E', // Brown
-        // Extended colors for larger grids
-        11: '#98989D', // Gray
-        12: '#D0FF14', // Lime
-        13: '#00FFFF', // Cyan
-        14: '#FF00FF', // Magenta
-        15: '#000080', // Navy
-        16: '#800000', // Maroon
+        1: '#FF0000',  // R - Red
+        2: '#0000FF',  // B - Blue
+        3: '#FFFF00',  // Y - Yellow
+        4: '#008000',  // G - Green
+        5: '#FFA500',  // O - Orange
+        6: '#00FFFF',  // C - Cyan
+        7: '#FF00FF',  // M - Magenta
+        8: '#800000',  // m - Maroon
+        9: '#800080',  // P - Purple
+        10: '#808080', // A - Gray
+        11: '#FFFFFF', // W - White
+        12: '#00FF00', // g - Bright Green
+        13: '#D2B48C', // T - Tan
+        14: '#00008B', // b - Dark Blue
+        15: '#008B8B', // c - Dark Cyan
+        16: '#FFC0CB', // p - Pink
     };
 
     const initializeBoard = (boardSize: number) => {
