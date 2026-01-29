@@ -1,13 +1,13 @@
 # Flow Free Solver
 
+> **Flow Free Solver** (also known as a **Number Link Solver**) is a high-performance web tool that instantly solves logic puzzles **locally in your browser**. Built with **React** and **WebAssembly**, it uses advanced AI algorithms (*Z3 Theorem Prover* and *A\**) to find solutions for grids ranging from 5x5 to 15x15 without sending data to a server.
+
 ![Flow Free Solver Demo](./assets/freeflow.gif)
 
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://flow.kongesque.com/)
 [![Author](https://img.shields.io/badge/Author-Kongesque-blue)](https://www.kongesque.com/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite)](https://vitejs.dev/)
-
-**Flow Free Solver** (also known as a **Number Link Solver**) is a high-performance web tool that instantly solves logic puzzles **locally in your browser**. Built with **React** and **WebAssembly**, it uses advanced AI algorithms (*Z3 Theorem Prover* and *A\**) to find solutions for grids ranging from 5x5 to 15x15 without sending data to a server.
 
 ### 🧩 What is Flow Free?
 Flow Free (classically known as **Number Link**) is a logic puzzle where players must connect colored dots on a grid.
@@ -19,6 +19,13 @@ The rules seem simple, but the puzzle becomes exponentially harder as the grid s
 While 5x5 grids are trivial, **15x15 grids** require finding a specific Hamiltonian-like path that satisfies global constraints, making it a classic NP-complete problem for computers.
 
 Try it online: **[https://flow.kongesque.com/](https://flow.kongesque.com/)**
+
+## 🔬 Algorithms Used
+
+| Algorithm | Type | Description |
+|-----------|------|-------------|
+| [Z3 Theorem Prover](https://github.com/Z3Prover/z3) | SAT/SMT Solver | Microsoft Research's industrial-strength constraint solver, compiled to WebAssembly |
+| [A* Search Algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm) | Heuristic Search | Pathfinding with Manhattan distance heuristic and lookahead pruning |
 
 ## ✨ Key Features
 

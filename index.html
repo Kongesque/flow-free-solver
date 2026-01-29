@@ -27,6 +27,8 @@
   <meta name="twitter:creator" content="@kongesque" />
 
   <link rel="manifest" href="/manifest.json" />
+  <link rel="preload" href="/z3-built.wasm" as="fetch" type="application/wasm" crossorigin>
+  <link rel="preload" href="/demo.jpg" as="image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
@@ -35,62 +37,119 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Flow Free Solver",
-      "headline": "Advanced AI Solver for Number Link Puzzles",
-      "description": "High-performance online solver for Flow Free and Number Link puzzles. Features a WebAssembly-powered Z3 SMT engine and heuristics-driven A* search for instant solutions.",
-      "url": "https://flow.kongesque.com",
-      "applicationCategory": "PuzzleSolver",
-      "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/OnlineOnly"
-      },
-      "author": {
-        "@type": "Person",
-        "name": "Kongesque",
-        "url": "https://www.kongesque.com/",
-        "sameAs": ["https://github.com/Kongesque"]
-      },
-      "featureList": [
-        "Client-side Z3 SMT Solver (WebAssembly)",
-        "A* Search Algorithm",
-        "Backtracking Heuristics",
-        "Real-time Puzzle Editing",
-        "Supports 5x5 to 15x15 Grids"
-      ],
-      "mentions": [
+      "@graph": [
         {
           "@type": "SoftwareApplication",
-          "name": "Z3 Theorem Prover",
-          "sameAs": [
-            "https://www.wikidata.org/wiki/Q85816952",
-            "https://en.wikipedia.org/wiki/Z3_Theorem_Prover"
+          "name": "Flow Free Solver",
+          "headline": "Advanced AI Solver for Number Link Puzzles",
+          "description": "High-performance online solver for Flow Free and Number Link puzzles. Features a WebAssembly-powered Z3 SMT engine and heuristics-driven A* search for instant solutions.",
+          "url": "https://flow.kongesque.com",
+          "applicationCategory": "PuzzleSolver",
+          "operatingSystem": "Any",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/OnlineOnly"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Kongesque",
+            "url": "https://www.kongesque.com/",
+            "sameAs": ["https://github.com/Kongesque"]
+          },
+          "featureList": [
+            "Client-side Z3 SMT Solver (WebAssembly)",
+            "A* Search Algorithm",
+            "Backtracking Heuristics",
+            "Real-time Puzzle Editing",
+            "Supports 5x5 to 15x15 Grids"
+          ],
+          "mentions": [
+            {
+              "@type": "Thing",
+              "name": "Z3 Theorem Prover",
+              "sameAs": [
+                "https://www.wikidata.org/wiki/Q85816952",
+                "https://en.wikipedia.org/wiki/Z3_Theorem_Prover"
+              ]
+            },
+            {
+              "@type": "Thing",
+              "name": "A* search algorithm",
+              "sameAs": [
+                "https://www.wikidata.org/wiki/Q277680",
+                "https://en.wikipedia.org/wiki/A*_search_algorithm"
+              ]
+            },
+            {
+              "@type": "Thing",
+              "name": "Flow Free",
+              "sameAs": "https://en.wikipedia.org/wiki/Flow_Free"
+            }
+          ],
+          "potentialAction": {
+            "@type": "SolveAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://flow.kongesque.com"
+            }
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is Flow Free Solver?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Flow Free Solver is a free online tool that solves Flow Free and Numberlink puzzles using AI algorithms (Z3 Theorem Prover and A* search). It runs entirely in your browser using WebAssembly."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the solver work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It uses two methods: SAT solving (Z3 compiled to WebAssembly) treats the puzzle as a constraint satisfaction problem, while A* search uses heuristic pathfinding with pruning."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What grid sizes are supported?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The solver supports grids from 5x5 to 15x15, covering all standard Flow Free puzzle sizes."
+              }
+            }
           ]
         },
         {
-          "@type": "Thing",
-          "name": "A* search algorithm",
-          "sameAs": [
-            "https://www.wikidata.org/wiki/Q277680",
-            "https://en.wikipedia.org/wiki/A*_search_algorithm"
+          "@type": "HowTo",
+          "name": "How to Solve a Flow Free Puzzle",
+          "step": [
+            {
+              "@type": "HowToStep",
+              "position": 1,
+              "name": "Select Grid Size",
+              "text": "Choose a grid size from 5x5 to 15x15 using the dropdown menu."
+            },
+            {
+              "@type": "HowToStep",
+              "position": 2,
+              "name": "Place Color Endpoints",
+              "text": "Click empty cells to place two endpoints of the same color. Each color needs exactly two dots."
+            },
+            {
+              "@type": "HowToStep",
+              "position": 3,
+              "name": "Click Solve",
+              "text": "Press the Solve button to instantly calculate non-overlapping paths connecting all color pairs."
+            }
           ]
-        },
-        {
-          "@type": "Thing",
-          "name": "Flow Free",
-          "sameAs": "https://en.wikipedia.org/wiki/Flow_Free"
         }
-      ],
-      "potentialAction": {
-        "@type": "SolveAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://flow.kongesque.com"
-        }
-      }
+      ]
     }
   </script>
 </head>
