@@ -35,27 +35,66 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
+      "@type": "SoftwareApplication",
       "name": "Flow Free Solver",
-      "description": "Free online Flow Free puzzle solver using AI algorithms: backtracking, BFS, A*, and Z3 SAT Solver.",
+      "headline": "Advanced AI Solver for Number Link Puzzles",
+      "description": "High-performance online solver for Flow Free and Number Link puzzles. Features a WebAssembly-powered Z3 SMT engine and heuristics-driven A* search for instant solutions.",
       "url": "https://kongesque.github.io/flow-free-solver",
-      "applicationCategory": "PuzzleGame",
+      "applicationCategory": "PuzzleSolver",
       "operatingSystem": "Any",
       "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "USD"
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/OnlineOnly"
       },
       "author": {
         "@type": "Person",
-        "name": "Kongesque"
+        "name": "Kongesque",
+        "url": "https://www.kongesque.com/",
+        "sameAs": ["https://github.com/Kongesque"]
       },
-      "datePublished": "2024-01-01",
-      "keywords": "Flow Free, Number Link, puzzle solver, online tool"
+      "featureList": [
+        "Client-side Z3 SMT Solver (WebAssembly)",
+        "A* Search Algorithm",
+        "Backtracking Heuristics",
+        "Real-time Puzzle Editing",
+        "Supports 5x5 to 15x15 Grids"
+      ],
+      "mentions": [
+        {
+          "@type": "SoftwareApplication",
+          "name": "Z3 Theorem Prover",
+          "sameAs": [
+            "https://www.wikidata.org/wiki/Q85816952",
+            "https://en.wikipedia.org/wiki/Z3_Theorem_Prover"
+          ]
+        },
+        {
+          "@type": "Thing",
+          "name": "A* search algorithm",
+          "sameAs": [
+            "https://www.wikidata.org/wiki/Q277680",
+            "https://en.wikipedia.org/wiki/A*_search_algorithm"
+          ]
+        },
+        {
+          "@type": "Thing",
+          "name": "Flow Free",
+          "sameAs": "https://en.wikipedia.org/wiki/Flow_Free"
+        }
+      ],
+      "potentialAction": {
+        "@type": "SolveAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://kongesque.github.io/flow-free-solver"
+        }
+      }
     }
   </script>
-  <script type="module" crossorigin src="/flow-free-solver/assets/index-ov7saYmE.js"></script>
-  <link rel="stylesheet" crossorigin href="/flow-free-solver/assets/index-DVyjLfAL.css">
+  <script type="module" crossorigin src="/flow-free-solver/assets/index-DmkrumYE.js"></script>
+  <link rel="stylesheet" crossorigin href="/flow-free-solver/assets/index-DEzwOVDN.css">
 </head>
 
 <body>
