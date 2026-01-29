@@ -4,7 +4,7 @@ const FlowSolver = () => {
     const defaultSize = 5;
     const sizeOptions = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
-    // Custom color palette requested by user
+    // color palette
     const COLORS: Record<number, string> = {
         1: '#FF0000',  // R - Red
         2: '#0000FF',  // B - Blue
