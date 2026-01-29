@@ -1,5 +1,4 @@
 {
-  "homepage": "https://kongesque.github.io/flow-free-solver",
   "name": "app",
   "version": "0.1.0",
   "description": "A React-based Flow Free puzzle solver featuring A* heuristics and client-side Z3 SAT solver integration.",
