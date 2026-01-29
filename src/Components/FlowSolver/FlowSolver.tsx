@@ -117,6 +117,8 @@ const FlowSolver = () => {
         setBoard(newBoard);
     }, [board, solvedBoard, activeColor]);
 
+    const [solverType, setSolverType] = useState<'astar' | 'z3'>('z3');
+
     const solveBoard = async () => {
         // Clear any previous error and set loading
         setError(null);
@@ -140,6 +142,9 @@ const FlowSolver = () => {
                 setError('Timed out (15s limit)');
                 // Auto-dismiss error after 4 seconds
                 setTimeout(() => setError(null), 4000);
+            } else if (result.error) {
+                setError('Solver error: ' + result.error);
+                setTimeout(() => setError(null), 3000);
             } else {
                 setError('No solution found');
                 // Auto-dismiss error after 3 seconds
@@ -155,7 +160,7 @@ const FlowSolver = () => {
             worker.terminate();
         };
 
-        worker.postMessage(board);
+        worker.postMessage({ board, type: solverType });
     };
 
     // Declarative Board Rendering
@@ -278,6 +283,18 @@ const FlowSolver = () => {
                         {sizeOptions.map(option => (
                             <option key={option} value={option}>{option}×{option}</option>
                         ))}
+                    </select>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-xs sm:text-sm">▼</span>
+                </div>
+
+                <div className="relative">
+                    <select
+                        className='h-10 sm:h-11 pl-3 pr-8 text-xs sm:text-sm border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                        value={solverType}
+                        onChange={(e) => setSolverType(e.target.value as 'astar' | 'z3')}
+                    >
+                        <option value="astar">A* Solver</option>
+                        <option value="z3">SAT Solver (Z3)</option>
                     </select>
                     <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-xs sm:text-sm">▼</span>
                 </div>
