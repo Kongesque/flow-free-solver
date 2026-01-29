@@ -184,64 +184,55 @@ const FlowSolver = () => {
             </header>
 
             {/* Grid - flat brutalist, responsive cell sizes */}
+            {/* Grid - responsive CSS grid */}
             <div
-                className="flex flex-col bg-stoic-line border-2 border-stoic-line"
-                style={{ gap: '2px' }}
+                className="grid bg-stoic-line border-2 border-stoic-line mx-auto"
+                style={{
+                    gap: '2px',
+                    gridTemplateColumns: `repeat(${size}, 1fr)`,
+                    gridTemplateRows: `repeat(${size}, 1fr)`,
+                    width: 'min(92vw, 60vh)',
+                    height: 'min(92vw, 60vh)'
+                }}
             >
-                {Array.from({ length: size }).map((_, y) => (
-                    <div key={y} className="flex" style={{ gap: '2px' }}>
-                        {Array.from({ length: size }).map((_, x) => {
-                            const cellValue = currentBoard[x]?.[y] ?? 0;
-                            const hasColor = cellValue !== 0;
+                {Array.from({ length: size }).map((_, y) =>
+                    Array.from({ length: size }).map((_, x) => {
+                        const cellValue = currentBoard[x]?.[y] ?? 0;
+                        const hasColor = cellValue !== 0;
 
-                            // Dynamic cell size based on grid size for mobile fit
-                            // Smaller grids = larger cells, larger grids = smaller cells
-                            const cellSizeClass = size <= 6
-                                ? 'w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16'
-                                : size <= 8
-                                    ? 'w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14'
-                                    : 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12';
-
-                            const circleSizeClass = size <= 6
-                                ? 'w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12'
-                                : size <= 8
-                                    ? 'w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10'
-                                    : 'w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8';
-
-                            return (
-                                <button
-                                    key={x}
-                                    type="button"
-                                    className={`
-                                        group
-                                        ${cellSizeClass}
-                                        bg-stoic-block-bg
-                                        p-0 m-0 appearance-none cursor-pointer 
-                                        flex items-center justify-center 
-                                        transition-all duration-150
-                                        touch-manipulation
-                                        select-none
-                                        ${solvedBoard ? 'cursor-default' : 'hover:bg-stoic-block-hover active:scale-95 active:bg-stoic-block-hover'}
-                                    `}
-                                    onClick={() => !solvedBoard && handleCellClick(x, y)}
-                                    aria-label={`Cell ${x},${y} ${hasColor ? `Color ${cellValue}` : 'Empty'}`}
-                                >
-                                    {hasColor ? (
-                                        <span
-                                            className={`${circleSizeClass} rounded-full`}
-                                            style={{ backgroundColor: COLORS[cellValue] || '#888' }}
-                                        />
-                                    ) : !solvedBoard && (
-                                        <span
-                                            className={`${circleSizeClass} rounded-full opacity-0 group-hover:opacity-50 transition-opacity duration-75`}
-                                            style={{ backgroundColor: COLORS[activeColor] || '#888' }}
-                                        />
-                                    )}
-                                </button>
-                            );
-                        })}
-                    </div>
-                ))}
+                        return (
+                            <button
+                                key={`${x}-${y}`}
+                                type="button"
+                                className={`
+                                    group
+                                    w-full h-full
+                                    bg-stoic-block-bg
+                                    p-0 m-0 appearance-none cursor-pointer 
+                                    flex items-center justify-center 
+                                    transition-all duration-150
+                                    touch-manipulation
+                                    select-none
+                                    ${solvedBoard ? 'cursor-default' : 'hover:bg-stoic-block-hover active:scale-95 active:bg-stoic-block-hover'}
+                                `}
+                                onClick={() => !solvedBoard && handleCellClick(x, y)}
+                                aria-label={`Cell ${x},${y} ${hasColor ? `Color ${cellValue}` : 'Empty'}`}
+                            >
+                                {hasColor ? (
+                                    <span
+                                        className="rounded-full w-[70%] h-[70%]"
+                                        style={{ backgroundColor: COLORS[cellValue] || '#888' }}
+                                    />
+                                ) : !solvedBoard && (
+                                    <span
+                                        className="rounded-full w-[70%] h-[70%] opacity-0 group-hover:opacity-50 transition-opacity duration-75"
+                                        style={{ backgroundColor: COLORS[activeColor] || '#888' }}
+                                    />
+                                )}
+                            </button>
+                        );
+                    })
+                )}
             </div>
 
             {/* Status indicator - contextual feedback */}
