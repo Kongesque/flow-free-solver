@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { savePuzzleState, loadPuzzleState, clearPuzzleState } from '../../hooks/useStorage';
 
 const FlowSolver = () => {
     const defaultSize = 5;
@@ -37,8 +38,52 @@ const FlowSolver = () => {
     const [isPlacingSecond, setIsPlacingSecond] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isSolving, setIsSolving] = useState(false);
+    const [solverType, setSolverType] = useState<'astar' | 'z3'>('z3');
 
     const [solveTime, setSolveTime] = useState<number | null>(null);
+
+    // IndexedDB: Track if initial load is complete
+    const [isLoaded, setIsLoaded] = useState(false);
+    const saveTimeoutRef = useRef<number | null>(null);
+
+    // Load saved state on mount
+    useEffect(() => {
+        loadPuzzleState().then((saved) => {
+            if (saved) {
+                setSize(saved.size);
+                setBoard(saved.board);
+                setSolverType(saved.solverType);
+                setActiveColor(saved.activeColor);
+                setIsPlacingSecond(saved.isPlacingSecond);
+            }
+            setIsLoaded(true);
+        });
+    }, []);
+
+    // Auto-save state on changes (debounced 500ms)
+    useEffect(() => {
+        if (!isLoaded) return; // Don't save until initial load is complete
+
+        if (saveTimeoutRef.current) {
+            clearTimeout(saveTimeoutRef.current);
+        }
+
+        saveTimeoutRef.current = window.setTimeout(() => {
+            savePuzzleState({
+                size,
+                board,
+                solverType,
+                activeColor,
+                isPlacingSecond,
+            });
+        }, 500);
+
+        return () => {
+            if (saveTimeoutRef.current) {
+                clearTimeout(saveTimeoutRef.current);
+            }
+        };
+    }, [size, board, solverType, activeColor, isPlacingSecond, isLoaded]);
 
     const resetBoard = useCallback((newSize: number = size) => {
         setBoard(initializeBoard(newSize));
@@ -47,6 +92,8 @@ const FlowSolver = () => {
         setIsPlacingSecond(false);
         setError(null);
         setSolveTime(null);
+        // Clear saved state on reset
+        clearPuzzleState();
     }, [size]);
 
     const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -126,7 +173,7 @@ const FlowSolver = () => {
         setBoard(newBoard);
     }, [board, solvedBoard, activeColor]);
 
-    const [solverType, setSolverType] = useState<'astar' | 'z3'>('z3');
+
 
     const solveBoard = async () => {
         // Clear any previous error and set loading
