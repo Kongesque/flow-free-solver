@@ -2,7 +2,7 @@
 
 ![Flow Free Solver Demo](./assets/freeflow.gif)
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://kongesque.github.io/flow-free-solver/)
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://flow-free-solver.vercel.app/)
 [![Author](https://img.shields.io/badge/Author-Kongesque-blue)](https://www.kongesque.com/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite)](https://vitejs.dev/)
@@ -18,7 +18,7 @@ The rules seem simple, but the puzzle becomes exponentially harder as the grid s
 
 While 5x5 grids are trivial, **15x15 grids** require finding a specific Hamiltonian-like path that satisfies global constraints, making it a classic NP-complete problem for computers.
 
-Try it online: **[https://kongesque.github.io/flow-free-solver/](https://kongesque.github.io/flow-free-solver/)**
+Try it online: **[https://flow-free-solver.vercel.app/](https://flow-free-solver.vercel.app/)**
 
 ## ✨ Key Features
 
@@ -79,7 +79,7 @@ npm install
 
 ## 🌐 Live Deployment
 
-**[Flow Free Solver Live Demo](https://kongesque.github.io/flow-free-solver/)**
+**[Flow Free Solver Live Demo](https://flow-free-solver.vercel.app/)**
 
 ---
 
