@@ -42,6 +42,9 @@ const FlowSolver = () => {
 
     const [solveTime, setSolveTime] = useState<number | null>(null);
 
+    // Prevent hover preview flash during reset
+    const [isResetting, setIsResetting] = useState(false);
+
     // IndexedDB: Track if initial load is complete
     const [isLoaded, setIsLoaded] = useState(false);
     const saveTimeoutRef = useRef<number | null>(null);
@@ -86,6 +89,8 @@ const FlowSolver = () => {
     }, [size, board, solverType, activeColor, isPlacingSecond, isLoaded]);
 
     const resetBoard = useCallback((newSize: number = size) => {
+        // Prevent hover preview flash by setting isResetting before state changes
+        setIsResetting(true);
         setBoard(initializeBoard(newSize));
         setSolvedBoard(null);
         setActiveColor(1);
@@ -94,6 +99,8 @@ const FlowSolver = () => {
         setSolveTime(null);
         // Clear saved state on reset
         clearPuzzleState();
+        // Re-enable hover preview after React has completed the render cycle
+        requestAnimationFrame(() => setIsResetting(false));
     }, [size]);
 
     const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -276,7 +283,7 @@ const FlowSolver = () => {
                                         className="rounded-full w-[70%] h-[70%]"
                                         style={{ backgroundColor: COLORS[cellValue] || '#888' }}
                                     />
-                                ) : !solvedBoard && (
+                                ) : !solvedBoard && !isResetting && (
                                     <span
                                         className="rounded-full w-[70%] h-[70%] opacity-0 group-hover:opacity-50 transition-opacity duration-75"
                                         style={{ backgroundColor: COLORS[activeColor] || '#888' }}
@@ -385,10 +392,12 @@ const FlowSolver = () => {
 
             <footer className="px-6 max-w-lg text-center text-stoic-secondary text-xs leading-relaxed selectable-text shrink-0">
                 <p>
-                    Interactive solver for Number Link puzzles.
+                    Solve any Flow Free or Numberlink puzzle instantly.
                     <br className="hidden sm:block" />
-                    Supports 5×5 to 15×15 grids using SAT (Z3) & A* algorithms.
+                    Powered by SAT (Z3) & A* search · 5×5 to 15×15 grids.
                 </p>
+                <p className="mt-2 text-stoic-secondary/70">
+                    <strong className="text-stoic-secondary">Tips:</strong> Click to place endpoints, click again to remove.                </p>
                 <div className="mt-2 flex justify-center gap-4">
                     <a href="https://www.kongesque.com/" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary hover:underline transition-colors">Author</a>
                     <a href="https://github.com/Kongesque/flow-free-solver" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary hover:underline transition-colors">GitHub</a>
