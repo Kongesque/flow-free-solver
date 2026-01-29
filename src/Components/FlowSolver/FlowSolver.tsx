@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 
 const FlowSolver = () => {
     const defaultSize = 5;
-    const sizeOptions = [5, 6, 7, 8, 9, 10];
+    const sizeOptions = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
     // Vibrant color palette
     const COLORS: Record<number, string> = {
@@ -16,6 +16,13 @@ const FlowSolver = () => {
         8: '#FF2D92',  // Pink
         9: '#5856D6',  // Indigo
         10: '#A2845E', // Brown
+        // Extended colors for larger grids
+        11: '#98989D', // Gray
+        12: '#D0FF14', // Lime
+        13: '#00FFFF', // Cyan
+        14: '#FF00FF', // Magenta
+        15: '#000080', // Navy
+        16: '#800000', // Maroon
     };
 
     const initializeBoard = (boardSize: number) => {
@@ -89,10 +96,10 @@ const FlowSolver = () => {
             if (currentCount >= 2) {
                 // Color is complete - find next available
                 let nextColor = activeColor;
-                while (countColor(board, nextColor) >= 2 && nextColor <= 10) {
+                while (countColor(board, nextColor) >= 2 && nextColor <= 16) {
                     nextColor++;
                 }
-                if (nextColor > 10) return; // All colors placed
+                if (nextColor > 16) return; // All colors placed
                 setActiveColor(nextColor);
                 setIsPlacingSecond(countColor(board, nextColor) === 1);
                 return; // Don't place yet, let user click again with updated color
@@ -103,7 +110,7 @@ const FlowSolver = () => {
             if (currentCount === 1) {
                 // This was the 2nd endpoint - advance to next color
                 let nextColor = activeColor + 1;
-                while (countColor(newBoard, nextColor) >= 2 && nextColor <= 10) {
+                while (countColor(newBoard, nextColor) >= 2 && nextColor <= 16) {
                     nextColor++;
                 }
                 setActiveColor(nextColor);
@@ -326,7 +333,7 @@ const FlowSolver = () => {
                     Solve Flow Free puzzles (Number Link) instantly using AI algorithms: backtracking, BFS, A*, and Z3 SAT Solver. Connect colored dots without crossing paths.
                 </p>
                 <p className="mb-2">
-                    This online Flow Free solver handles puzzles from 5×5 to 10×10 grids.
+                    This online Flow Free solver handles puzzles from 5×5 to 15×15 grids.
                     Perfect for learning puzzle-solving algorithms or quickly solving challenging Number Link puzzles.
                 </p>
                 <p className="mb-2">

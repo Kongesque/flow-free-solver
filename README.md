@@ -14,7 +14,7 @@ The Flow Free Solver project employs advanced algorithms including a backtrackin
 
 ## ✨ Features
 
-- **Interactive Grid Editor** — Click to place and remove numbered pairs on grids from 5×5 to 10×10
+- **Interactive Grid Editor** — Click to place and remove numbered pairs on grids from 5×5 to 15×15
 - **Solver Algorithms** — Choice between Heuristic (BFS/A*) and Z3 SAT Solver (WebAssembly)
 - **Web Worker Execution** — Non-blocking solver runs in background thread for responsive UI
 - **Visual Solution Paths** — Animated path rendering with color-coded connections
