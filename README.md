@@ -10,12 +10,12 @@
 
 Flow Free, also know as Number Link, is a widely popular puzzle game that challenges players to connect pairs of colored dots on a grid. The goal is to draw paths between each pair of dots such that the paths do not overlap, and the entire grid is occupied. Players must connect dots of the same color while ensuring paths do not cross.
 
-The Flow Free Solver project employs a backtracking approach with Breadth-First Search (BFS) and A* algorithm heuristics to solve Flow-Free puzzles by connecting pairs of colored dots.
+The Flow Free Solver project employs advanced algorithms including a backtracking BFS/A* heuristic solver and a fully client-side Z3 SAT solver (using WebAssembly) to solve Flow-Free puzzles by connecting pairs of colored dots.
 
 ## ✨ Features
 
 - **Interactive Grid Editor** — Click to place and remove numbered pairs on grids from 5×5 to 10×10
-- **Solver Algorithms** — BFS/A* backtracking based solver
+- **Solver Algorithms** — Choice between Heuristic (BFS/A*) and Z3 SAT Solver (WebAssembly)
 - **Web Worker Execution** — Non-blocking solver runs in background thread for responsive UI
 - **Visual Solution Paths** — Animated path rendering with color-coded connections
 
@@ -31,7 +31,7 @@ This approach explores paths recursively to connect pairs of dots, with the foll
 
 ## Solver Method 2: SAT Solver Approach
 
-This approach frames Flow Free as a Constraint Satisfaction Problem (CSP) and translates game requirements into logical formulas suitable for SAT solvers, such as the Z3 solver in Python. The SAT solver leverages constraints to ensure all puzzle requirements are met. Here's how the constraints are structured:
+This approach frames Flow Free as a Constraint Satisfaction Problem (CSP) and translates game requirements into logical formulas suitable for SAT solvers. This project utilizes the Z3 library compiled to WebAssembly to run this powerful solver directly in your browser, porting the logic from Python to TypeScript. The SAT solver leverages constraints to ensure all puzzle requirements are met. Here's how the constraints are structured:
 
 - **Single-Color Cell Requirement**: Each cell on the grid must contain only one color, ensuring there are no overlaps. This is expressed as:
 

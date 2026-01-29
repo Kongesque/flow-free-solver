@@ -323,7 +323,7 @@ const FlowSolver = () => {
 
             <footer className="mt-8 px-4 max-w-2xl text-center text-stoic-secondary text-xs selectable-text">
                 <p className="mb-2">
-                    Solve Flow Free puzzles (Number Link) instantly using AI algorithms: backtracking, BFS, and A*. Connect colored dots without crossing paths.
+                    Solve Flow Free puzzles (Number Link) instantly using AI algorithms: backtracking, BFS, A*, and Z3 SAT Solver. Connect colored dots without crossing paths.
                 </p>
                 <p className="mb-2">
                     This online Flow Free solver handles puzzles from 5×5 to 10×10 grids.
