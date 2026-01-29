@@ -244,7 +244,7 @@ const FlowSolver = () => {
             <div className='flex items-center gap-3 min-h-[28px] selectable-text shrink-0'>
                 {isSolving ? (
                     <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold flex items-center gap-2'>
-                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
                             <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
@@ -288,6 +288,7 @@ const FlowSolver = () => {
                         className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
                         value={size}
                         onChange={handleSizeChange}
+                        aria-label="Grid Size"
                     >
                         {sizeOptions.map(option => (
                             <option key={option} value={option}>{option}×{option}</option>
@@ -301,6 +302,7 @@ const FlowSolver = () => {
                         className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
                         value={solverType}
                         onChange={(e) => setSolverType(e.target.value as 'astar' | 'z3')}
+                        aria-label="Solver Algorithm"
                     >
                         <option value="astar">A*</option>
                         <option value="z3">SAT (Z3)</option>
@@ -314,7 +316,7 @@ const FlowSolver = () => {
                     disabled={isSolving}
                 >
                     {isSolving && (
-                        <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none">
+                        <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
                             <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
