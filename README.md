@@ -7,7 +7,7 @@
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite)](https://vitejs.dev/)
 
-**Flow Free Solver** (also known as a **Number Link Solver**) is a high-performance web tool that instantly solves logic puzzles where you connect colored dots. Built with **React** and **WebAssembly**, it uses advanced AI algorithms (*Z3 Theorem Prover* and *A\**) to find solutions for grids ranging from 5x5 to 15x15.
+**Flow Free Solver** (also known as a **Number Link Solver**) is a high-performance web tool that instantly solves logic puzzles **locally in your browser**. Built with **React** and **WebAssembly**, it uses advanced AI algorithms (*Z3 Theorem Prover* and *A\**) to find solutions for grids ranging from 5x5 to 15x15 without sending data to a server.
 
 ### 🧩 What is Flow Free?
 Flow Free (classically known as **Number Link**) is a logic puzzle where players must connect colored dots on a grid.
