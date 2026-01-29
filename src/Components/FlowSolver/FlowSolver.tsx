@@ -185,12 +185,13 @@ const FlowSolver = () => {
             {/* Header with clear hierarchy */}
             <header className='text-center flex flex-col items-center gap-1 selectable-text shrink-0'>
                 <h1 className='text-stoic-primary text-xl sm:text-2xl md:text-3xl uppercase tracking-[0.2em] font-bold'>
-                    Flow Solver
+                    Flow Free Solver
                 </h1>
             </header>
 
-            {/* Grid - responsive CSS grid */}
-            <div
+            {/* Grid - Core Interaction Area */}
+            <article
+                aria-label="Puzzle Grid Board"
                 className="grid bg-stoic-line border-2 border-stoic-line mx-auto shrink-0"
                 style={{
                     gap: '2px',
@@ -238,99 +239,102 @@ const FlowSolver = () => {
                         );
                     })
                 )}
-            </div>
+            </article>
 
-            {/* Status indicator - contextual feedback */}
-            <div className='flex items-center gap-3 min-h-[28px] selectable-text shrink-0'>
-                {isSolving ? (
-                    <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold flex items-center gap-2'>
-                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
-                            <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                        </svg>
-                        Solving…
-                    </span>
-                ) : error ? (
-                    <span className='text-sm uppercase tracking-widest font-semibold animate-pulse'
-                        style={{ color: '#FF3B30' }}
-                    >
-                        ✗ {error}
-                    </span>
-                ) : solvedBoard ? (
-                    <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold flex items-center gap-2'>
-                        ✓ Solved
-                        {solveTime !== null && (
-                            <span className="text-stoic-secondary text-xs opacity-75">
-                                ({solveTime < 1000 ? `${Math.round(solveTime)}ms` : `${(solveTime / 1000).toFixed(2)}s`})
-                            </span>
-                        )}
-                    </span>
-                ) : (
-                    <div className='flex items-center gap-3'>
-                        <span className='text-stoic-primary text-sm uppercase tracking-wider font-medium'>Place</span>
-                        <div className="flex items-center gap-3">
-                            <span
-                                className="w-4 h-4 rounded-full"
-                                style={{ backgroundColor: COLORS[activeColor] || '#888' }}
-                            />
-                            <span className='text-stoic-primary text-sm uppercase tracking-wider font-medium'>
-                                {isPlacingSecond ? 'End' : 'Start'}
-                            </span>
+            {/* Controls & Status Section */}
+            <section aria-label="Game Controls" className="flex flex-col items-center gap-6 shrink-0 z-10">
+                {/* Status indicator - contextual feedback */}
+                <div role="status" className='flex items-center gap-3 min-h-[28px] selectable-text'>
+                    {isSolving ? (
+                        <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold flex items-center gap-2'>
+                            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                                <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                            Solving…
+                        </span>
+                    ) : error ? (
+                        <span className='text-sm uppercase tracking-widest font-semibold animate-pulse'
+                            style={{ color: '#FF3B30' }}
+                        >
+                            ✗ {error}
+                        </span>
+                    ) : solvedBoard ? (
+                        <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold flex items-center gap-2'>
+                            ✓ Solved
+                            {solveTime !== null && (
+                                <span className="text-stoic-secondary text-xs opacity-75">
+                                    ({solveTime < 1000 ? `${Math.round(solveTime)}ms` : `${(solveTime / 1000).toFixed(2)}s`})
+                                </span>
+                            )}
+                        </span>
+                    ) : (
+                        <div className='flex items-center gap-3'>
+                            <span className='text-stoic-primary text-sm uppercase tracking-wider font-medium'>Place</span>
+                            <div className="flex items-center gap-3">
+                                <span
+                                    className="w-4 h-4 rounded-full"
+                                    style={{ backgroundColor: COLORS[activeColor] || '#888' }}
+                                />
+                                <span className='text-stoic-primary text-sm uppercase tracking-wider font-medium'>
+                                    {isPlacingSecond ? 'End' : 'Start'}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                )}
-            </div>
-
-            {/* Controls - responsive layout */}
-            <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
-                <div className="relative">
-                    <select
-                        className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
-                        value={size}
-                        onChange={handleSizeChange}
-                        aria-label="Grid Size"
-                    >
-                        {sizeOptions.map(option => (
-                            <option key={option} value={option}>{option}×{option}</option>
-                        ))}
-                    </select>
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-[10px]">▼</span>
-                </div>
-
-                <div className="relative">
-                    <select
-                        className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
-                        value={solverType}
-                        onChange={(e) => setSolverType(e.target.value as 'astar' | 'z3')}
-                        aria-label="Solver Algorithm"
-                    >
-                        <option value="astar">A*</option>
-                        <option value="z3">SAT (Z3)</option>
-                    </select>
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-[10px]">▼</span>
-                </div>
-
-                <button
-                    className='h-9 sm:h-10 px-4 text-xs border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg select-none flex items-center gap-2'
-                    onClick={solveBoard}
-                    disabled={isSolving}
-                >
-                    {isSolving && (
-                        <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
-                            <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                        </svg>
                     )}
-                    {isSolving ? 'Solving' : 'Solve'}
-                </button>
+                </div>
 
-                <button
-                    className='h-9 sm:h-10 px-3 text-xs border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors select-none'
-                    onClick={() => resetBoard()}
-                >
-                    Reset
-                </button>
-            </div>
+                {/* Controls - responsive layout */}
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                    <div className="relative">
+                        <select
+                            className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                            value={size}
+                            onChange={handleSizeChange}
+                            aria-label="Grid Size"
+                        >
+                            {sizeOptions.map(option => (
+                                <option key={option} value={option}>{option}×{option}</option>
+                            ))}
+                        </select>
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-[10px]">▼</span>
+                    </div>
+
+                    <div className="relative">
+                        <select
+                            className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                            value={solverType}
+                            onChange={(e) => setSolverType(e.target.value as 'astar' | 'z3')}
+                            aria-label="Solver Algorithm"
+                        >
+                            <option value="astar">A*</option>
+                            <option value="z3">SAT (Z3)</option>
+                        </select>
+                        <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-[10px]">▼</span>
+                    </div>
+
+                    <button
+                        className='h-9 sm:h-10 px-4 text-xs border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg select-none flex items-center gap-2'
+                        onClick={solveBoard}
+                        disabled={isSolving}
+                    >
+                        {isSolving && (
+                            <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+                                <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                        )}
+                        {isSolving ? 'Solving' : 'Solve'}
+                    </button>
+
+                    <button
+                        className='h-9 sm:h-10 px-3 text-xs border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors select-none'
+                        onClick={() => resetBoard()}
+                    >
+                        Reset
+                    </button>
+                </div>
+            </section>
 
             <footer className="px-6 max-w-lg text-center text-stoic-secondary text-xs leading-relaxed selectable-text shrink-0">
                 <p>
@@ -339,8 +343,9 @@ const FlowSolver = () => {
                     Supports 5×5 to 15×15 grids using SAT (Z3) & A* algorithms.
                 </p>
                 <div className="mt-2 flex justify-center gap-4">
-                    <a href="https://en.wikipedia.org/wiki/Numberlink" target="_blank" rel="noopener noreferrer nofollow" className="hover:text-stoic-primary hover:underline transition-colors">Wikipedia</a>
+                    <a href="https://www.kongesque.com/" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary hover:underline transition-colors">Author</a>
                     <a href="https://github.com/Kongesque/flow-free-solver" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary hover:underline transition-colors">GitHub</a>
+                    <a href="https://en.wikipedia.org/wiki/Numberlink" target="_blank" rel="noopener noreferrer nofollow" className="hover:text-stoic-primary hover:underline transition-colors">Wikipedia</a>
                 </div>
             </footer>
         </main>
