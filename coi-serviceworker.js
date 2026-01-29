@@ -108,6 +108,15 @@ if (typeof window === 'undefined') {
                         !coi.quiet && console.log("Reloading page to make use of COOP/COEP Service Worker.");
                         coi.doReload();
                     }
+
+                    // Check if we need to force a reload if crossOriginIsolated is still false
+                    // but we have a controller. This can happen on some mobile browsers.
+                    if (n.serviceWorker.controller && window.crossOriginIsolated === false && coi.shouldRegister()) {
+                        !coi.quiet && console.log("Service worker controlling but not isolated. Retrying reload...");
+                        setTimeout(() => {
+                            if (window.crossOriginIsolated === false) coi.doReload();
+                        }, 500);
+                    }
                 },
                 (err) => {
                     !coi.quiet && console.error("COOP/COEP Service Worker failed to register:", err);
