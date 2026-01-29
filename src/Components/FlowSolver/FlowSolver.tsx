@@ -266,14 +266,14 @@ const FlowSolver = () => {
                         )}
                     </span>
                 ) : (
-                    <div className='flex items-center gap-3 bg-stoic-block-bg px-4 py-1.5 rounded-full border border-stoic-line'>
-                        <span className='text-stoic-secondary text-xs uppercase tracking-wider font-medium'>Place</span>
-                        <div className="flex items-center gap-2">
+                    <div className='flex items-center gap-3'>
+                        <span className='text-stoic-primary text-sm uppercase tracking-wider font-medium'>Place</span>
+                        <div className="flex items-center gap-3">
                             <span
-                                className="w-4 h-4 rounded-full shadow-sm"
+                                className="w-4 h-4 rounded-full"
                                 style={{ backgroundColor: COLORS[activeColor] || '#888' }}
                             />
-                            <span className='text-stoic-primary text-xs uppercase tracking-wider font-bold'>
+                            <span className='text-stoic-primary text-sm uppercase tracking-wider font-medium'>
                                 {isPlacingSecond ? 'End' : 'Start'}
                             </span>
                         </div>
