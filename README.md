@@ -2,94 +2,89 @@
 
 ![Flow Free Solver Demo](./assets/freeflow.gif)
 
-
-
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://kongesque.github.io/flow-free-solver/)
+[![Author](https://img.shields.io/badge/Author-Kongesque-blue)](https://www.kongesque.com/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite)](https://vitejs.dev/)
 
-Flow Free, also know as Number Link, is a widely popular puzzle game that challenges players to connect pairs of colored dots on a grid. The goal is to draw paths between each pair of dots such that the paths do not overlap, and the entire grid is occupied. Players must connect dots of the same color while ensuring paths do not cross.
+**Flow Free Solver** (also known as a **Number Link Solver**) is a high-performance web tool that instantly solves logic puzzles where you connect colored dots. Built with **React** and **WebAssembly**, it uses advanced AI algorithms (*Z3 Theorem Prover* and *A\**) to find solutions for grids ranging from 5x5 to 15x15.
 
-The Flow Free Solver project employs advanced algorithms including a backtracking BFS/A* heuristic solver and a fully client-side Z3 SAT solver (using WebAssembly) to solve Flow-Free puzzles by connecting pairs of colored dots.
+### 🧩 What is Flow Free?
+Flow Free (classically known as **Number Link**) is a logic puzzle where players must connect colored dots on a grid.
+The rules seem simple, but the puzzle becomes exponentially harder as the grid size increases:
+1.  **Connect Matching Colors**: Draw a pipe to pair every matching color (e.g., Red to Red).
+2.  **No Crossings**: Pipes cannot cross or overlap each other.
+3.  **Fill the Board**: **Critical!** You must occupy every single square on the grid. A solution is only valid if there are no empty spaces left.
 
-## ✨ Features
+While 5x5 grids are trivial, **15x15 grids** require finding a specific Hamiltonian-like path that satisfies global constraints, making it a classic NP-complete problem for computers.
 
-- **Interactive Grid Editor** — Click to place and remove numbered pairs on grids from 5×5 to 15×15
-- **Solver Algorithms** — Choice between Heuristic (BFS/A*) and Z3 SAT Solver (WebAssembly)
-- **Web Worker Execution** — Non-blocking solver runs in background thread for responsive UI
-- **Visual Solution Paths** — Animated path rendering with color-coded connections
+Try it online: **[https://kongesque.github.io/flow-free-solver/](https://kongesque.github.io/flow-free-solver/)**
+
+## ✨ Key Features
+
+- **Instant AI Solutions**: Solves complex Number Link puzzles in milliseconds using the Z3 SMT Solver (compiled to Wasm).
+- **Interactive Editor**: Draw your own puzzles or test specific configurations on grids up to 15x15.
+- **Dual Algorithms**: Compare the performance of heuristic search (A*) vs. constraint satisfaction (SAT).
+- **Visual Paths**: See the solution animated in real-time.
+
+---
+
+## 🎮 How to Use
+
+1.  **Select Grid Size**: Choose a size from 5x5 to 15x15.
+2.  **Paint the Board**: Click an empty cell to place a color. Click again to visualize the path.
+    - *Tip*: You need exactly two dots of the same color to form a pair.
+3.  **Click Solve**: The AI will instantly calculate the non-overlapping paths.
 
 ---
 
-## Solver Method 1: Backtracking with BFS and A* Algorithm
+## 🧠 Technical Architecture
 
-This approach explores paths recursively to connect pairs of dots, with the following components:
+This project is a showcase of bringing competitive programming algorithms to the client-side web.
 
-- **Path Construction**: For each color, BFS is used to explore possible paths between terminal pairs.
-- **Heuristic Optimization**: The A* algorithm applies heuristics to estimate the minimum distance between each color pair. If a path does not satisfy this heuristic, the algorithm backtracks to explore alternative paths.
-- **Lookahead Check**: The `lookaheadHeuristics` function assesses whether each color can feasibly connect to its target. If connection is deemed unfeasible, the algorithm skips to the next path, reducing unnecessary computations.
+### Method 1: Z3 SAT Solver (WebAssembly)
+We treat the puzzle as a **Constraint Satisfaction Problem (CSP)**. By compiling the Microsoft Z3 Theorem Prover to WebAssembly, we can run industrial-strength logic solving directly in the browser without a backend.
+- **Constraint 1**: Every cell must have a color or be empty (initially).
+- **Constraint 2**: Every color endpoint has exactly one neighbor of the same color.
+- **Constraint 3**: Every path cell has exactly two neighbors of the same color (flow conservation).
 
-## Solver Method 2: SAT Solver Approach
-
-This approach frames Flow Free as a Constraint Satisfaction Problem (CSP) and translates game requirements into logical formulas suitable for SAT solvers. This project utilizes the Z3 library compiled to WebAssembly to run this powerful solver directly in your browser, porting the logic from Python to TypeScript. The SAT solver leverages constraints to ensure all puzzle requirements are met. Here's how the constraints are structured:
-
-- **Single-Color Cell Requirement**: Each cell on the grid must contain only one color, ensuring there are no overlaps. This is expressed as:
-
-$$
-  Cell_{ij} = \begin{cases}
-   Cell_{ij} &\text{if } Cell_{ij}>0 \\
-   Cell_{ij}>0 &\text{if } Cell_{ij}=0
-  \end{cases}
-$$
-
-- **Terminal Cell Connection**: Terminal cells must have exactly one connecting path to another cell of the same color, maintaining a link between pairs. This constraint is represented as:
-
-$$
-Cell_{ij} = N_{ij} = 1, \text{ if } Cell_{ij} > 0
-$$
-
-- **Continuous Path for Connecting Cells**: Cells between terminals must connect with exactly two adjacent cells of the same color, or zero if unoccupied. This is expressed as:
-
-$$
-Cell_{ij} = N_{ij} = 2 \text{ or } N_{ij} = 0, \text{ if } Cell_{ij} = 0
-$$
-
-  where $N_{ij}$ represents the cell's neighbors, determined by Manhattan distance. This constraint ensures that paths are continuous without overlapping.
+### Method 2: Heuristic Search (A*)
+A traditional graph search approach:
+- **Path Construction**: BFS explores potential routes.
+- **Heuristics**: A* estimates the remaining distance (Manhattan distance) to guide the search.
+- **Pruning**: `lookaheadHeuristics` discard invalid states early (e.g., if a color gets trapped).
 
 ---
-  
-## 🚀 Getting Started
+
+## 🚀 Local Development
 
 ### Prerequisites
-
 - Node.js 18+ and npm
 
-### 1. Clone the Repository
+### Installation
 ```bash
 git clone https://github.com/Kongesque/Flow-Free-Solver.git
 cd Flow-Free-Solver
-```
-
-### 2. Install Dependencies
-```bash
 npm install
 ```
 
-### 3. Available Commands
-
+### Commands
 | Command | Description |
 |---------|-------------|
-| `npm start` | Start development server at http://localhost:5173 |
-| `npm run build` | Build production bundle to `dist/` |
-| `npm run preview` | Preview production build locally |
+| `npm start` | Start local dev server |
+| `npm run build` | Build for production |
 | `npm run deploy` | Deploy to GitHub Pages |
 
-## 🌐 Deployment
+---
 
-The Flow-Free-Solver project is deployed at: **[https://kongesque.github.io/flow-free-solver/](https://kongesque.github.io/flow-free-solver/)**
+## 🌐 Live Deployment
+
+**[Flow Free Solver Live Demo](https://kongesque.github.io/flow-free-solver/)**
 
 ---
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+Open source under the [MIT License](LICENSE).
+
+Created by **[Kongesque](https://www.kongesque.com/)**.
