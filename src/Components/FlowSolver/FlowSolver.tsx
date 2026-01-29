@@ -38,12 +38,15 @@ const FlowSolver = () => {
     const [error, setError] = useState<string | null>(null);
     const [isSolving, setIsSolving] = useState(false);
 
+    const [solveTime, setSolveTime] = useState<number | null>(null);
+
     const resetBoard = useCallback((newSize: number = size) => {
         setBoard(initializeBoard(newSize));
         setSolvedBoard(null);
         setActiveColor(1);
         setIsPlacingSecond(false);
         setError(null);
+        setSolveTime(null);
     }, [size]);
 
     const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -137,12 +140,18 @@ const FlowSolver = () => {
             { type: 'module' }
         );
 
+        const startTime = performance.now();
+
+        worker.postMessage({ board, type: solverType });
+
         worker.onmessage = (event) => {
             const result = event.data;
             setIsSolving(false);
             worker.terminate();
 
             if (result.board) {
+                const endTime = performance.now();
+                setSolveTime(endTime - startTime);
                 setSolvedBoard(result.board);
             } else if (result.timedOut) {
                 setError('Timed out (15s limit)');
@@ -165,34 +174,30 @@ const FlowSolver = () => {
             setTimeout(() => setError(null), 3000);
             worker.terminate();
         };
-
-        worker.postMessage({ board, type: solverType });
     };
 
     // Declarative Board Rendering
     const currentBoard = solvedBoard || board;
 
     return (
-        <main className='flex flex-col justify-center items-center min-h-screen px-4 py-6 bg-stoic-bg safe-area-inset touch-manipulation overflow-auto'>
+
+        <main className='flex flex-col justify-center items-center h-[100dvh] w-full bg-stoic-bg safe-area-inset touch-manipulation overflow-hidden gap-6 sm:gap-8'>
             {/* Header with clear hierarchy */}
-            <header className='mb-4 sm:mb-6 md:mb-8 text-center flex flex-col items-center gap-2 selectable-text'>
-                <h1 className='text-stoic-primary text-lg sm:text-xl md:text-2xl lg:text-3xl uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold'>
-                    Flow Free Solver
+            <header className='text-center flex flex-col items-center gap-1 selectable-text shrink-0'>
+                <h1 className='text-stoic-primary text-xl sm:text-2xl md:text-3xl uppercase tracking-[0.2em] font-bold'>
+                    Flow Solver
                 </h1>
-
-
             </header>
 
-            {/* Grid - flat brutalist, responsive cell sizes */}
             {/* Grid - responsive CSS grid */}
             <div
-                className="grid bg-stoic-line border-2 border-stoic-line mx-auto"
+                className="grid bg-stoic-line border-2 border-stoic-line mx-auto shrink-0"
                 style={{
                     gap: '2px',
                     gridTemplateColumns: `repeat(${size}, 1fr)`,
                     gridTemplateRows: `repeat(${size}, 1fr)`,
-                    width: 'min(92vw, 60vh)',
-                    height: 'min(92vw, 60vh)'
+                    width: 'min(90vw, 55vh)',
+                    height: 'min(90vw, 55vh)'
                 }}
             >
                 {Array.from({ length: size }).map((_, y) =>
@@ -236,7 +241,7 @@ const FlowSolver = () => {
             </div>
 
             {/* Status indicator - contextual feedback */}
-            <div className='mt-6 flex items-center gap-3 min-h-[28px] selectable-text'>
+            <div className='flex items-center gap-3 min-h-[28px] selectable-text shrink-0'>
                 {isSolving ? (
                     <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold flex items-center gap-2'>
                         <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
@@ -252,28 +257,35 @@ const FlowSolver = () => {
                         ✗ {error}
                     </span>
                 ) : solvedBoard ? (
-                    <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold'>
+                    <span className='text-stoic-accent text-sm uppercase tracking-widest font-semibold flex items-center gap-2'>
                         ✓ Solved
+                        {solveTime !== null && (
+                            <span className="text-stoic-secondary text-xs opacity-75">
+                                ({solveTime < 1000 ? `${Math.round(solveTime)}ms` : `${(solveTime / 1000).toFixed(2)}s`})
+                            </span>
+                        )}
                     </span>
                 ) : (
-                    <>
-                        <span className='text-stoic-secondary text-sm uppercase tracking-wider'>Put</span>
-                        <span
-                            className="w-5 h-5 rounded-full"
-                            style={{ backgroundColor: COLORS[activeColor] || '#888' }}
-                        />
-                        <span className='text-stoic-secondary text-sm uppercase tracking-wider'>
-                            {isPlacingSecond ? '2nd' : '1st'}
-                        </span>
-                    </>
+                    <div className='flex items-center gap-3 bg-stoic-block-bg px-4 py-1.5 rounded-full border border-stoic-line'>
+                        <span className='text-stoic-secondary text-xs uppercase tracking-wider font-medium'>Place</span>
+                        <div className="flex items-center gap-2">
+                            <span
+                                className="w-4 h-4 rounded-full shadow-sm"
+                                style={{ backgroundColor: COLORS[activeColor] || '#888' }}
+                            />
+                            <span className='text-stoic-primary text-xs uppercase tracking-wider font-bold'>
+                                {isPlacingSecond ? 'End' : 'Start'}
+                            </span>
+                        </div>
+                    </div>
                 )}
             </div>
 
             {/* Controls - responsive layout */}
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-6">
+            <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
                 <div className="relative">
                     <select
-                        className='h-10 sm:h-11 pl-3 pr-8 text-xs sm:text-sm border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                        className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
                         value={size}
                         onChange={handleSizeChange}
                     >
@@ -281,28 +293,28 @@ const FlowSolver = () => {
                             <option key={option} value={option}>{option}×{option}</option>
                         ))}
                     </select>
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-xs sm:text-sm">▼</span>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-[10px]">▼</span>
                 </div>
 
                 <div className="relative">
                     <select
-                        className='h-10 sm:h-11 pl-3 pr-8 text-xs sm:text-sm border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                        className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
                         value={solverType}
                         onChange={(e) => setSolverType(e.target.value as 'astar' | 'z3')}
                     >
-                        <option value="astar">A* Solver</option>
-                        <option value="z3">SAT Solver (Z3)</option>
+                        <option value="astar">A*</option>
+                        <option value="z3">SAT (Z3)</option>
                     </select>
-                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-xs sm:text-sm">▼</span>
+                    <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-[10px]">▼</span>
                 </div>
 
                 <button
-                    className='h-10 sm:h-11 px-4 sm:px-6 text-xs sm:text-sm border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg select-none flex items-center gap-2'
+                    className='h-9 sm:h-10 px-4 text-xs border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg select-none flex items-center gap-2'
                     onClick={solveBoard}
                     disabled={isSolving}
                 >
                     {isSolving && (
-                        <svg className="animate-spin h-3 w-3 sm:h-4 sm:w-4" viewBox="0 0 24 24" fill="none">
+                        <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
                             <path className="opacity-100" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
@@ -311,28 +323,27 @@ const FlowSolver = () => {
                 </button>
 
                 <button
-                    className='h-10 sm:h-11 px-3 sm:px-5 text-xs sm:text-sm border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors select-none'
+                    className='h-9 sm:h-10 px-3 text-xs border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors select-none'
                     onClick={() => resetBoard()}
                 >
                     Reset
                 </button>
             </div>
 
-            <footer className="mt-8 px-4 max-w-2xl text-center text-stoic-secondary text-xs selectable-text">
-                <p className="mb-2">
-                    Solve Flow Free puzzles (Number Link) instantly using AI algorithms: backtracking, BFS, A*, and Z3 SAT Solver. Connect colored dots without crossing paths.
+            <footer className="px-6 max-w-lg text-center text-stoic-secondary text-xs leading-relaxed selectable-text shrink-0">
+                <p>
+                    Interactive solver for Number Link puzzles.
+                    <br className="hidden sm:block" />
+                    Supports 5×5 to 15×15 grids using SAT (Z3) & A* algorithms.
                 </p>
-                <p className="mb-2">
-                    This online Flow Free solver handles puzzles from 5×5 to 15×15 grids.
-                    Perfect for learning puzzle-solving algorithms or quickly solving challenging Number Link puzzles.
-                </p>
-                <p className="mb-2">
-                    <a href="https://en.wikipedia.org/wiki/Numberlink" target="_blank" rel="noopener noreferrer nofollow" className="underline hover:text-stoic-accent">Learn more about Number Link on Wikipedia</a> •
-                    <a href="https://github.com/Kongesque/flow-free-solver" target="_blank" rel="noopener noreferrer" className="underline hover:text-stoic-accent ml-1">View source code on GitHub</a>
-                </p>
+                <div className="mt-2 flex justify-center gap-4">
+                    <a href="https://en.wikipedia.org/wiki/Numberlink" target="_blank" rel="noopener noreferrer nofollow" className="hover:text-stoic-primary hover:underline transition-colors">Wikipedia</a>
+                    <a href="https://github.com/Kongesque/flow-free-solver" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary hover:underline transition-colors">GitHub</a>
+                </div>
             </footer>
         </main>
     );
+
 };
 
 export default FlowSolver;
