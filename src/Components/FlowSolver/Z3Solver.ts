@@ -7,28 +7,28 @@ import type { Board } from './Solver';
 export async function solveZ3(board: Board): Promise<Board | null> {
     const baseUrl = (import.meta as any).env.BASE_URL || '/';
 
-    console.log('[Z3Solver] Dynamically importing Z3 module');
+    if (import.meta.env.DEV) console.log('[Z3Solver] Dynamically importing Z3 module');
 
     // Dynamically import the raw z3-built module
     // @ts-ignore - No types for the raw Emscripten module  
     const { default: initZ3 } = await import('z3-solver/build/z3-built');
 
-    console.log('[Z3Solver] Z3 module imported successfully');
+    if (import.meta.env.DEV) console.log('[Z3Solver] Z3 module imported successfully');
 
-    console.log('[Z3Solver] Initializing Z3');
+    if (import.meta.env.DEV) console.log('[Z3Solver] Initializing Z3');
 
     // Initialize the Emscripten module with locateFile for WASM and worker
     const emModule = await initZ3({
         locateFile: (path: string) => {
             if (path.endsWith('.wasm')) {
-                console.log(`[Z3Solver] locateFile for WASM: ${path}`);
+                if (import.meta.env.DEV) console.log(`[Z3Solver] locateFile for WASM: ${path}`);
                 return baseUrl + 'z3-built.wasm';
             }
             if (path.endsWith('.worker.js')) {
-                console.log(`[Z3Solver] locateFile for worker: ${path}`);
+                if (import.meta.env.DEV) console.log(`[Z3Solver] locateFile for worker: ${path}`);
                 return baseUrl + 'z3-built.worker.js';
             }
-            console.log(`[Z3Solver] locateFile for unknown: ${path}`);
+            if (import.meta.env.DEV) console.log(`[Z3Solver] locateFile for unknown: ${path}`);
             return path;
         },
         // Tell Emscripten where the main script is for worker spawning
