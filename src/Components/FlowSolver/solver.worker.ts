@@ -11,7 +11,7 @@ const COLOR_CHARS = [
 
 let cSolverInstance: any = null;
 
-async function solveCSolver(board: number[][]): Promise<any> {
+async function solveHeuristicBFS(board: number[][]): Promise<any> {
     if (!cSolverInstance) {
         try {
             // Import the Emscripten module from src folder
@@ -116,7 +116,7 @@ async function solveCSolver(board: number[][]): Promise<any> {
     }
 }
 
-self.onmessage = async (event: MessageEvent<{ board: number[][], type: 'astar' | 'z3' | 'c_solver' }>) => {
+self.onmessage = async (event: MessageEvent<{ board: number[][], type: 'astar' | 'z3' | 'heuristic_bfs' }>) => {
     const { board, type } = event.data;
 
     try {
@@ -127,8 +127,8 @@ self.onmessage = async (event: MessageEvent<{ board: number[][], type: 'astar' |
             } else {
                 self.postMessage({ board: null, timedOut: false, timeTaken: 0, nodeCount: 0 });
             }
-        } else if (type === 'c_solver') {
-            const result = await solveCSolver(board);
+        } else if (type === 'heuristic_bfs') {
+            const result = await solveHeuristicBFS(board);
             if (result) {
                 self.postMessage({ board: result, timedOut: false, timeTaken: 0, nodeCount: 0 });
             } else {

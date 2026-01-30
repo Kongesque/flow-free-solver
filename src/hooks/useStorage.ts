@@ -11,7 +11,7 @@ const STATE_KEY = 'current';
 export interface PuzzleState {
     size: number;
     board: number[][];
-    solverType: 'astar' | 'z3' | 'c_solver';
+    solverType: 'astar' | 'z3' | 'heuristic_bfs';
     activeColor: number;
     isPlacingSecond: boolean;
     savedAt: number;

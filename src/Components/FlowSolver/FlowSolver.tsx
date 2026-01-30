@@ -38,7 +38,7 @@ const FlowSolver = () => {
     const [isPlacingSecond, setIsPlacingSecond] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isSolving, setIsSolving] = useState(false);
-    const [solverType, setSolverType] = useState<'astar' | 'z3' | 'c_solver'>('c_solver');
+    const [solverType, setSolverType] = useState<'astar' | 'z3' | 'heuristic_bfs'>('heuristic_bfs');
 
     const [solveTime, setSolveTime] = useState<number | null>(null);
 
@@ -358,12 +358,12 @@ const FlowSolver = () => {
                         <select
                             className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
                             value={solverType}
-                            onChange={(e) => setSolverType(e.target.value as 'astar' | 'z3' | 'c_solver')}
+                            onChange={(e) => setSolverType(e.target.value as 'astar' | 'z3' | 'heuristic_bfs')}
                             aria-label="Solver Algorithm"
                         >
                             <option value="astar">A*</option>
                             <option value="z3">SAT (Z3)</option>
-                            <option value="c_solver">Custom C (WASM)</option>
+                            <option value="heuristic_bfs">Heuristic BFS</option>
                         </select>
                         <span className="absolute right-2 top-1/2 -translate-y-1/2 text-stoic-secondary pointer-events-none text-[10px]">▼</span>
                     </div>
