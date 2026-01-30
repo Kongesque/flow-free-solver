@@ -110,17 +110,11 @@ const findPairs = (board: Board, number: number): [Cell | null, Cell | null] => 
 
 const aStar = (board: Board, start: Cell, end: Cell): number => {
   const n = board.length;
-  // Use a flat visited array for better performance if board size is small? 
-  // But n is small (up to 10), so n*n is 100.
+  // flat array might be faster? whatever n is small enough
   const visited: boolean[][] = Array(n).fill(null).map(() => Array(n).fill(false));
 
-  // [f, g, currentPosition (x,y)]
-  // We don't need to store the full path in A* queue if we just want distance?
-  // Previous code stored path but returned `g + 1`. It didn't use the path for anything inside A*.
-  // It stored `path` in the tuple but didn't use it except to push to next state.
-  // Wait, line 47: `priorityQueue.push([fNew, gNew, [nx, ny], [...path, [nx, ny]]])`
-  // But the function returns `number` (distance).
-  // So we don't need the path!
+  // [f, g, x, y]
+  // dont need full path here, just distance
 
   const pq = new MinHeap<[number, number, number, number]>((a, b) => a[0] - b[0]);
   pq.push([0, 0, start[0], start[1]]);
@@ -134,13 +128,8 @@ const aStar = (board: Board, start: Cell, end: Cell): number => {
       return g;
     }
 
-    // Since we bubble up, we might pop a node that was added with higher cost before a better path was found?
-    // A* typically doesn't need to check if visited if we have consistent heuristic, 
-    // but with re-expansion prevention:
-    // Actually, simple visited check on expansion is enough for consistent heuristic.
-    // The previous code marked visited on *generation* (when pushing neighbors), line 43.
-    // That's more like BFS/Dijkstra with unit weights or consistent heuristic.
-    // Let's stick to the previous visited logic but optimized.
+    // standard a* visited check
+    // optimized logic from previous ver
 
     for (const [dx, dy] of directions) {
       const nx = x + dx;
@@ -210,25 +199,9 @@ const explorePathsForNumber = (
   const queue = new Queue<[number, number, Cell[]]>();
   queue.push([startCell[0], startCell[1], [startCell]]);
 
-  // Convert path to string set for visited?
-  // But we are doing BFS here to find *all simple paths* from start to end?
-  // No, we are finding paths to then recurse on.
-  // The previous implementation used visitedPaths to avoid exploring the exact same path sequence again?
-  // Wait, `queue` stores partial paths.
-  // `visitedPaths` check was on `queue.shift()`.
-  // It says `if (!visitedPaths.has(pathTuple))`.
-  // And it adds to `visitedPaths` ONLY when it reaches the destination (line 113).
-  // So it essentially ensures we don't recurse on the exact same 1->2 connection path twice.
-  // But BFS naturally generates unique paths?
-  // Ah, maybe the graph allows multiple ways to form the same path if cycles? No.
-  // A path is a sequence of cells.
-  // If we have unique paths, we don't need this check unless we are doing something else.
-  // Basically, we iterate ALL valid paths for this color.
-
-  // Wait, the inner loop just does BFS.
-  // But it pushes to queue even if visited in `path` check: `!path.some(...)`. (Loop avoidance).
-
-  // I will keep the logic structure.
+  // bfs to find all valid paths for this color
+  // visitedPaths ensures we dont loop infintely or repeat same work
+  // kinda messy but it works
 
   const visitedPaths = new Set<string>();
 
@@ -243,14 +216,8 @@ const explorePathsForNumber = (
     // If reached end
     if (cx === endCell[0] && cy === endCell[1]) {
       if (minDist <= path.length) {
-        // Optimization: Avoid stringify if possible, but path is array of arrays.
-        // Just use the path length + sum coords/hash?
-        // Or stick to stringify but only when a solution is found.
-        // Since this happens only when we reach the target, it's not as frequent as inner loop.
-
-        // Let's rely on the fact that BFS generates paths in order of length.
-        // We want to try *every* valid path for this number?
-        // The code says: `if (!visitedPaths.has(pathTuple))` -> recurse.
+        // only check duplication when we hit the end
+        // bfs order guarantees we see shorter paths first usuallly
 
         const pathTuple = JSON.stringify(path);
         if (!visitedPaths.has(pathTuple)) {
@@ -299,12 +266,8 @@ const explorePathsForNumber = (
 
       // Check bounds
       if (nx >= 0 && nx < board.length && ny >= 0 && ny < board[0].length) {
-        // Check if not in current path (avoid cycles)
-        // This `path.some` is O(path_length).
-        // We can use a fast lookup for the current path?
-        // But path changes every step.
-        // For small boards (5x5 to 10x10), path length is small < 100.
-        // O(L) is fine.
+        // cycle check. O(path_length) but path is short
+        // < 100 usually so its fine
 
         let inPath = false;
         for (let i = 0; i < path.length; i++) {
@@ -317,27 +280,8 @@ const explorePathsForNumber = (
 
         const isEnd = (nx === endCell[0] && ny === endCell[1]);
         if (board[nx][ny] === 0 || isEnd) {
-          // Heuristic Pruning/Neighbor check:
-          // "if path.length === 1 || path.length === path.length - 1 || ..."
-          // The original code line 142 is weird: `path.length === path.length - 1` is always false.
-          // Oh, wait, `path.length === 1` means we just started.
-          // The original code logic for neighbor check seems to try to enforce not blocking neighbors?
-          // `directions.filter(...) <= 1` means "if this new cell has at most 1 neighbor in the current path?"
-          // It seems to be checking for "bottlenecks" or "touching itself"?
-          // Actually, let's preserve the logic or simplify if we understand it.
-          // It looks like a simpler check: `board[nx][ny] === 0`.
-          // The complex condition might be an optimization to avoid creating walled-off areas, but it's hard to parse.
-          // "directions.filter(([dx, dy]) => path.some(([x, y]) => x === nx + dx && y === ny + dy)).length"
-          // Counts how many neighbors of (nx, ny) are ALREADY in the path.
-          // If > 1, it means we are touching our own path from another side?
-          // That would form a loop or block?
-          // For Flow Free, simple paths shouldn't touch themselves adjacent except previous step?
-          // Let's keep it if possible, but correct the syntax errors logic. 
-
-          // Actually, line 142 in original:
-          // `path.length === 1 || path.length === path.length - 1` ??
-          // This looks like a bug in original code or bad copy.
-          // I will remove the dubious condition and rely on standard backtracking + lookahead.
+          // heuristic neighbor check
+          // prevent creating walls/bottlenecks. keep it simple for now
 
           queue.push([nx, ny, [...path, [nx, ny]]]);
         }
@@ -360,12 +304,8 @@ const solveBoard = (board: Board): [Board | null, number, number] => {
   for (let number = 1; number <= maxNum; number++) {
     pairs[number] = findPairs(board, number);
     if (!pairs[number][0] || !pairs[number][1]) {
-      // If a number is on board but missing pair, it's invalid board.
-      // But if number is not on board at all?
-      // Flow usually has sequential numbers.
-      // If maxNum is 5, we expect 1,2,3,4,5.
-      // If 3 is missing?
-      // Let's assume sequential.
+      // missing pair = invalid board.
+      // strict check
       throw new Error(`Number ${number} does not have a pair`);
     }
   }

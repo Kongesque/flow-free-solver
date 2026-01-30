@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { savePuzzleState, loadPuzzleState, clearPuzzleState } from '../../hooks/useStorage';
+import { savePuzzleState, loadPuzzleState, clearPuzzleState } from '@/hooks/useStorage';
 
 const FlowSolver = () => {
     const defaultSize = 5;
@@ -190,7 +190,7 @@ const FlowSolver = () => {
         // Use Web Worker to run solver in background thread
         // This keeps CSS animations responsive
         const worker = new Worker(
-            new URL('./solver.worker.ts', import.meta.url),
+            new URL('../workers/solver.worker.ts', import.meta.url),
             { type: 'module' }
         );
 

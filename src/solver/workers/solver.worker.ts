@@ -1,8 +1,7 @@
-// Web Worker for running solver in background thread
-// This keeps the UI responsive during computation
+// worker thread to keep ui smooth
 
-import { solve as solveAStar } from './Solver.tsx';
-import { solveZ3 } from './Z3Solver';
+import { solve as solveAStar } from '../logic/astar-solver.js';
+import { solveZ3 } from '../logic/z3-solver.js';
 
 
 const COLOR_CHARS = [
@@ -14,9 +13,9 @@ let cSolverInstance: any = null;
 async function solveHeuristicBFS(board: number[][]): Promise<any> {
     if (!cSolverInstance) {
         try {
-            // Import the Emscripten module from src folder
             // @ts-ignore
-            const module = await import('../../wasm/flow_solver_c.js');
+            // loading wasm module manually bc vite/worker types are annoying
+            const module = await import('../../../public/wasm/flow_solver_c.js');
             const createFlowSolver = module.default;
             cSolverInstance = await createFlowSolver({
                 locateFile: (path: string) => {
@@ -33,26 +32,17 @@ async function solveHeuristicBFS(board: number[][]): Promise<any> {
         }
     }
 
-    // 1. Convert board to string format
-    // Each line is a row. Chars are color codes or '.' for empty.
+    // 1. serialize board
+    // max size 15 for c solver iirc
     const size = board.length;
     let inputStr = "";
-
-    // Check constraints: max size 15 usually for C solver? Limit is defined in C code MAX_SIZE=15.
-    // If larger, it might fail.
 
     for (let r = 0; r < size; r++) {
         for (let c = 0; c < size; c++) {
 
-            // Existing code seems to use board[col][row]? 
-            // Let's verify FlowSolver.tsx: handleCellClick(x, y) -> board[x][y].
-            // Usually x is column, y is row.
-            // But loops in renderer: map((_, y) => map((_, x) => ... currentBoard[x][y]
-            // So board is [col][row].
-            // To print rows, we loop y then x.
-
-            const cellVal = board[c][r]; // Wait, loop outer r (y), inner c (x).
-            // So board[c][r] is board[x][y]. Correct.
+            // board is [col][row] so this is [c][r]. 
+            // confusing but it works
+            const cellVal = board[c][r];
 
             if (cellVal > 0 && cellVal < COLOR_CHARS.length) {
                 inputStr += COLOR_CHARS[cellVal];
@@ -75,28 +65,14 @@ async function solveHeuristicBFS(board: number[][]): Promise<any> {
     try {
         const solvedBoard = JSON.parse(jsonResult);
 
-        // Convert back to [col][row] format if needed?
-        // JSON is [[row0...], [row1...]] usually?
-        // C code:
-        // for (size_t i=0; i<info.size; ++i) { // i is row? or col?
-        //    for (size_t j=0; j<info.size; ++j) {
-        //        ptr += sprintf(ptr, "%d", ...);	
-        // C code `pos_from_coords(j, i)` implies j=x, i=y.
-        // So outer loop i is Y (rows). Inner loop j is X (cols).
-        // So JSON is [[(0,0), (1,0)...], [(0,1)...]].
-        // Effectively row-major.
-
-        // Frontend expects board[x][y].
-        // So we need to transpose or map correctly.
-        // solvedBoard[y][x] -> newBoard[x][y]
+        // json result is row-major, need to transpose back to [x][y]
+        // logic is kinda backwards here but correct matches the c output
 
         const newBoard = Array(size).fill(null).map(() => Array(size).fill(0));
         for (let y = 0; y < size; y++) {
             for (let x = 0; x < size; x++) {
-                // If solvedBoard[y][x] is ASCII code, convert to ID
-                // Wait, C code returns ASCII code of the char.
-                // We need to map ASCII 'R' -> 1.
-                // We can use COLOR_CHARS.indexOf(String.fromCharCode(code))
+                // map ascii code back to color id
+                // if 'R' -> 1 etc
 
                 const code = solvedBoard[y][x];
                 if (code === 0) {

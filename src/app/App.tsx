@@ -1,5 +1,5 @@
 
-import FlowSolver from './Components/FlowSolver/FlowSolver.tsx';
+import FlowSolver from '@/solver/components/FlowSolver';
 
 
 function App() {

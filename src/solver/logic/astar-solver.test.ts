@@ -1,4 +1,4 @@
-import { solve } from './Solver';
+import { solve } from './astar-solver';
 
 describe('Solver', () => {
     test('solves a simple 2x2 board', () => {

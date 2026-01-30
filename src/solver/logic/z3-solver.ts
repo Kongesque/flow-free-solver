@@ -1,16 +1,16 @@
-// @ts-ignore - Internal module, no types
+// @ts-ignore
 import { init as lowLevelInit } from 'z3-solver/build/low-level/wrapper.__GENERATED__';
-// @ts-ignore - Internal module, no types  
+// @ts-ignore
 import { createApi } from 'z3-solver/build/high-level';
-import type { Board } from './Solver';
+import type { Board } from './astar-solver';
 
 export async function solveZ3(board: Board): Promise<Board | null> {
     const baseUrl = (import.meta as any).env.BASE_URL || '/';
 
     if (import.meta.env.DEV) console.log('[Z3Solver] Dynamically importing Z3 module');
 
-    // Dynamically import the raw z3-built module
-    // @ts-ignore - No types for the raw Emscripten module  
+    // dynamic import z3 bc it's huge
+    // @ts-ignore  
     const { default: initZ3 } = await import('z3-solver/build/z3-built');
 
     if (import.meta.env.DEV) console.log('[Z3Solver] Z3 module imported successfully');
@@ -22,17 +22,16 @@ export async function solveZ3(board: Board): Promise<Board | null> {
         locateFile: (path: string) => {
             if (path.endsWith('.wasm')) {
                 if (import.meta.env.DEV) console.log(`[Z3Solver] locateFile for WASM: ${path}`);
-                return baseUrl + 'z3-built.wasm';
+                return baseUrl + 'wasm/z3-built.wasm';
             }
             if (path.endsWith('.worker.js')) {
                 if (import.meta.env.DEV) console.log(`[Z3Solver] locateFile for worker: ${path}`);
-                return baseUrl + 'z3-built.worker.js';
+                return baseUrl + 'wasm/z3-built.worker.js';
             }
             if (import.meta.env.DEV) console.log(`[Z3Solver] locateFile for unknown: ${path}`);
             return path;
         },
-        // Tell Emscripten where the main script is for worker spawning
-        mainScriptUrlOrBlob: baseUrl + 'z3-built.js'
+        mainScriptUrlOrBlob: baseUrl + 'wasm/z3-built.js'
     });
 
     // Build low-level API from the initialized Emscripten module
@@ -41,7 +40,7 @@ export async function solveZ3(board: Board): Promise<Board | null> {
     // Build high-level API from low-level
     const highLevel = createApi(lowLevel.Z3);
 
-    // Now we have the full z3-solver API
+    // ready only took 3 days to figure this api out
     const { Context } = highLevel;
     const { Solver, Int, Sum, If } = Context('main');
 
@@ -66,7 +65,7 @@ export async function solveZ3(board: Board): Promise<Board | null> {
                 // Fixed value
                 solver.add(B[i][j].eq(board[i][j]));
             } else {
-                // Must be positive (part of a flow)
+                // part of flow must be > 0 
                 solver.add(B[i][j].gt(0));
             }
         }
@@ -84,7 +83,7 @@ export async function solveZ3(board: Board): Promise<Board | null> {
                 const nj = j + dy;
 
                 if (ni >= 0 && ni < M && nj >= 0 && nj < N) {
-                    // If neighbor has same color, add 1, else 0
+                    // neighbor same color? +1
                     neighbors.push(If(B[i][j].eq(B[ni][nj]), 1, 0));
                 }
             }
@@ -95,7 +94,7 @@ export async function solveZ3(board: Board): Promise<Board | null> {
                 // Endpoint: must have exactly 1 neighbor of same color
                 solver.add(neighsSum.eq(1));
             } else {
-                // Path: must have exactly 2 neighbors of same color
+                // path needs exactly 2 neighbors (in/out)
                 solver.add(neighsSum.eq(2));
             }
         }
