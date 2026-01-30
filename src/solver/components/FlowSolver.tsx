@@ -252,7 +252,7 @@ const FlowSolver = () => {
 
         <main className='flex flex-col justify-center items-center h-[100dvh] w-full bg-stoic-bg safe-area-inset touch-manipulation overflow-hidden gap-3'>
             {/* Header with clear hierarchy */}
-            <header className='text-center flex flex-col items-center gap-1 selectable-text shrink-0 mb-3'>
+            <header className='text-center flex flex-col items-center gap-1 selectable-text shrink-0 mb-2'>
                 <h1 className='text-stoic-primary text-xl sm:text-2xl md:text-3xl uppercase tracking-[0.2em] font-bold'>
                     Flow Free Solver
                 </h1>
@@ -354,7 +354,7 @@ const FlowSolver = () => {
                 </div>
 
                 {/* Controls - responsive layout */}
-                <div className="flex flex-wrap items-center justify-center gap-3">
+                <div className="flex flex-wrap items-center justify-center gap-3 mb-2">
                     <div className="relative">
                         <select
                             className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
