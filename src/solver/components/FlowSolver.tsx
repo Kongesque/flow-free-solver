@@ -420,7 +420,7 @@ const FlowSolver = () => {
                 <p>
                     Solve any Flow Free or Numberlink puzzle instantly.
                     <br className="hidden sm:block" />
-                    Powered by SAT (Z3) & A* search · 5×5 to 15×15 grids.
+                    Powered by C++ Heuristic BFS, SAT (Z3) & A* search · 5×5 to 15×15 grids.
                 </p>
                 <p className="mt-2 text-stoic-secondary/70">
                     <strong className="text-stoic-secondary">Tips:</strong> Click to place endpoints, click again to remove.                </p>
