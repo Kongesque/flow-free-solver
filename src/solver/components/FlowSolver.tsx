@@ -250,9 +250,9 @@ const FlowSolver = () => {
 
     return (
 
-        <main className='flex flex-col justify-center items-center h-[100dvh] w-full bg-stoic-bg safe-area-inset touch-manipulation overflow-hidden gap-6 sm:gap-8'>
+        <main className='flex flex-col justify-center items-center h-[100dvh] w-full bg-stoic-bg safe-area-inset touch-manipulation overflow-hidden gap-3'>
             {/* Header with clear hierarchy */}
-            <header className='text-center flex flex-col items-center gap-1 selectable-text shrink-0'>
+            <header className='text-center flex flex-col items-center gap-1 selectable-text shrink-0 mb-3'>
                 <h1 className='text-stoic-primary text-xl sm:text-2xl md:text-3xl uppercase tracking-[0.2em] font-bold'>
                     Flow Free Solver
                 </h1>
@@ -311,7 +311,7 @@ const FlowSolver = () => {
             </article>
 
             {/* Controls & Status Section */}
-            <section aria-label="Game Controls" className="flex flex-col items-center gap-6 shrink-0 z-10">
+            <section aria-label="Game Controls" className="flex flex-col items-center gap-3 shrink-0 z-10">
                 {/* Status indicator - contextual feedback */}
                 <div role="status" className='flex items-center gap-3 min-h-[28px] selectable-text'>
                     {isSolving ? (
