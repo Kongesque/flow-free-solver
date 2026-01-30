@@ -106,6 +106,12 @@ const FlowSolver = () => {
     const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const newSize = parseInt(event.target.value);
         setSize(newSize);
+
+        // Z3 is only for 15x15. If switching to smaller, auto-switch to heuristic
+        if (newSize !== 15 && solverType === 'z3') {
+            setSolverType('heuristic_bfs');
+        }
+
         resetBoard(newSize);
     };
 
@@ -208,14 +214,23 @@ const FlowSolver = () => {
                 setSolveTime(endTime - startTime);
                 setSolvedBoard(result.board);
             } else if (result.timedOut) {
-                setError('Timed out (15s limit)');
-                // Auto-dismiss error after 4 seconds
+                // Customized timeout error
+                if (solverType === 'astar') {
+                    setError('Timed out. Try Heuristic BFS.');
+                } else {
+                    setError('Timed out (15s limit)');
+                }
                 setTimeout(() => setError(null), 4000);
             } else if (result.error) {
                 setError('Solver error: ' + result.error);
                 setTimeout(() => setError(null), 3000);
             } else {
-                setError('No solution found');
+                // No solution found
+                if (solverType === 'heuristic_bfs' && size === 15) {
+                    setError('No solution. Try Z3.');
+                } else {
+                    setError('No solution found');
+                }
                 // Auto-dismiss error after 3 seconds
                 setTimeout(() => setError(null), 3000);
             }
@@ -358,7 +373,17 @@ const FlowSolver = () => {
                         <select
                             className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
                             value={solverType}
-                            onChange={(e) => setSolverType(e.target.value as 'astar' | 'z3' | 'heuristic_bfs')}
+                            onChange={(e) => {
+                                const newType = e.target.value as 'astar' | 'z3' | 'heuristic_bfs';
+                                if (newType === 'z3' && size !== 15) {
+                                    // Prevent selection and show error
+                                    setError('Z3 is for 15x15 only');
+                                    setTimeout(() => setError(null), 2000);
+                                    setSolverType('heuristic_bfs');
+                                    return;
+                                }
+                                setSolverType(newType);
+                            }}
                             aria-label="Solver Algorithm"
                         >
                             <option value="astar">A*</option>
