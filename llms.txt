@@ -1,0 +1,23 @@
+# Flow Free Solver
+
+> A web-based solver for Flow Free and Numberlink puzzles using the Z3 Theorem Prover and A* search algorithm.
+
+## What it does
+- Solves Flow Free/Numberlink puzzles (5x5 to 15x15 grids)
+- Runs entirely in-browser using WebAssembly
+- No server required; all computation is client-side
+
+## Algorithms
+- Z3 SMT Solver: Constraint satisfaction approach (Microsoft Research)
+- A* Search: Heuristic pathfinding with pruning
+
+## Features
+- Interactive puzzle editor
+- Dual solver comparison (Z3 vs A*)
+- Real-time solution visualization
+- Supports all standard grid sizes (5x5 to 15x15)
+
+## Links
+- Live Demo: https://flow.kongesque.com
+- Source: https://github.com/Kongesque/flow-free-solver
+- Author: https://www.kongesque.com

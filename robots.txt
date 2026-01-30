@@ -1,4 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
-Sitemap: https://kongesque.github.io/flow-free-solver/sitemap.xml
+Sitemap: https://flow.kongesque.com/sitemap.xml
