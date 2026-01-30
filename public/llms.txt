@@ -10,6 +10,7 @@
 ## Algorithms
 - Z3 SMT Solver: Constraint satisfaction approach (Microsoft Research)
 - A* Search: Heuristic pathfinding with pruning
+- Heuristic BFS: Breadth-First Search with pruning
 
 ## Features
 - Interactive puzzle editor

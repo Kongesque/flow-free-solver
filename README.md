@@ -18,7 +18,7 @@ The rules seem simple, but the puzzle becomes exponentially harder as the grid s
 
 While 5x5 grids are trivial, **15x15 grids** require finding a specific Hamiltonian-like path that satisfies global constraints, making it a classic NP-complete problem for computers.
 
-Try it online: **[https://flow.kongesque.com/](https://flow.kongesque.com/)**
+Try it online: **[https://flow.kongesque.com](https://flow.kongesque.com)**
 
 ## 🔬 Algorithms Used
 
