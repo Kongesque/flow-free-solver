@@ -4,6 +4,7 @@ import { savePuzzleState, loadPuzzleState, clearPuzzleState } from '@/hooks/useS
 const FlowSolver = () => {
     const defaultSize = 5;
     const sizeOptions = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    const RESTRICT_Z3_TO_LARGE_GRIDS = false;
 
     // color palette
     const COLORS: Record<number, string> = {
@@ -108,7 +109,7 @@ const FlowSolver = () => {
         setSize(newSize);
 
         // Z3 is only for 15x15. If switching to smaller, auto-switch to heuristic
-        if (newSize !== 15 && solverType === 'z3') {
+        if (RESTRICT_Z3_TO_LARGE_GRIDS && newSize !== 15 && solverType === 'z3') {
             setSolverType('heuristic_bfs');
         }
 
@@ -375,7 +376,7 @@ const FlowSolver = () => {
                             value={solverType}
                             onChange={(e) => {
                                 const newType = e.target.value as 'astar' | 'z3' | 'heuristic_bfs';
-                                if (newType === 'z3' && size !== 15) {
+                                if (RESTRICT_Z3_TO_LARGE_GRIDS && newType === 'z3' && size !== 15) {
                                     // Prevent selection and show error
                                     setError('Z3 is for 15x15 only');
                                     setTimeout(() => setError(null), 2000);

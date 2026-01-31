@@ -31,14 +31,11 @@ Try it online: **[https://flow.kongesque.com](https://flow.kongesque.com)**
 | [A* Search Algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm) | Heuristic Search | Pathfinding with Manhattan distance heuristic and lookahead pruning |
 | [Heuristic BFS](https://mzucker.github.io/2016/08/28/flow-solver.html) | Algorithm Search | Optimized C implementation of Breadth-First Search with domain-specific heuristics by [Matt Zucker](https://mzucker.github.io/), compiled to WebAssembly |
 
-> **Key Takeaway**: While A* is faster for trivial puzzles, **Z3 (SAT)** scales far better for complex grids, solving problems in milliseconds that would take standard pathfinding algorithms eons.
-
 ## ✨ Key Features
 
 - **Instant AI Solutions**: Solves complex Number Link puzzles in milliseconds using the Z3 SMT Solver (compiled to Wasm).
 - **Interactive Editor**: Draw your own puzzles or test specific configurations on grids up to 15x15.
-- **Multiple Algorithms**: Compare the performance of heuristic search (A*), constraint satisfaction (SAT), and optimized C++ BFS.
-- **Visual Paths**: See the solution animated in real-time.
+- **Multiple Algorithms**: Compare the performance of heuristic search (A*), constraint satisfaction (SAT), and optimized C BFS.
 
 ---
 
@@ -68,7 +65,7 @@ A traditional graph search approach:
 - **Pruning**: `lookaheadHeuristics` discard invalid states early (e.g., if a color gets trapped).
 
 ### Method 3: Heuristic BFS 
-An optimized solver (based on [Matt Zucker's flow_solver](https://mzucker.github.io/2016/08/28/flow-solver.html)) written in C++ and compiled to WebAssembly. It achieves extreme performance through advanced pruning techniques:
+An optimized solver (based on [Matt Zucker's flow_solver](https://mzucker.github.io/2016/08/28/flow-solver.html)) written in C and compiled to WebAssembly. It achieves extreme performance through advanced pruning techniques:
 
 -   **Active Color Selection**: At each step, it only moves the "most constrained" color (the one with the fewest valid moves), drastically reducing the search tree size.
 -   **Dead-End & Stranding Checks**: It immediately discards states where a color is cut off from its goal or a region of the board becomes unreachable (using connected component labeling).
