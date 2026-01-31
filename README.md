@@ -2,7 +2,10 @@
 
 **Flow Free Solver** (also known as a **Number Link Solver**) is a high-performance web tool that **solves complex logic puzzles in milliseconds** locally in your browser. Built with **React** and **WebAssembly**, it uses advanced constraint solving algorithms (*Z3 Theorem Prover* and *A\**) to find solutions for grids ranging from 5x5 to 15x15 without sending data to a server.
 
-![Flow Free Solver Demo](./assets/freeflow.gif)
+<p align="center">
+  <img src="./assets/5x5_demo.gif" width="49%" alt="5x5 Demo" />
+  <img src="./assets/14x14_demo.gif" width="49%" alt="14x14 Demo" />
+</p>
 
 [![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://flow.kongesque.com/)
 [![Author](https://img.shields.io/badge/Author-Kongesque-blue)](https://www.kongesque.com/)
@@ -26,7 +29,7 @@ Try it online: **[https://flow.kongesque.com](https://flow.kongesque.com)**
 |-----------|------|-------------|
 | [Z3 Theorem Prover](https://github.com/Z3Prover/z3) | SAT/SMT Solver | Microsoft Research's industrial-strength constraint solver, compiled to WebAssembly |
 | [A* Search Algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm) | Heuristic Search | Pathfinding with Manhattan distance heuristic and lookahead pruning |
-| [Heuristic BFS](https://mzucker.github.io/2016/08/28/flow-solver.html) | Algorithm Search | Optimized C++ implementation of Breadth-First Search with domain-specific heuristics, compiled to WebAssembly |
+| [Heuristic BFS](https://mzucker.github.io/2016/08/28/flow-solver.html) | Algorithm Search | Optimized C implementation of Breadth-First Search with domain-specific heuristics by [Matt Zucker](https://mzucker.github.io/), compiled to WebAssembly |
 
 > **Key Takeaway**: While A* is faster for trivial puzzles, **Z3 (SAT)** scales far better for complex grids, solving problems in milliseconds that would take standard pathfinding algorithms eons.
 
