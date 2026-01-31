@@ -258,7 +258,7 @@ const FlowSolver = () => {
         worker.onerror = (error) => {
             console.error('Worker error:', error);
             setIsSolving(false);
-            setError('Solver error');
+            setError('Solver error. Please try again.');
             setTimeout(() => setError(null), 3000);
             setTimeout(() => setError(null), 3000);
             workerRef.current = null;
