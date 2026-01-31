@@ -422,8 +422,9 @@ const FlowSolver = () => {
                     <br className="hidden sm:block" />
                     Powered by C++ Heuristic BFS, SAT (Z3) & A* search.
                 </p>
-                <p className="mt-2 text-stoic-secondary/70">
-                    <strong className="text-stoic-secondary">Tips:</strong> Click to place endpoints, click again to remove.                </p>
+                <p className="mt-2">
+                    <strong className="text-stoic-secondary">Tips:</strong>  Click to place endpoints, click again to remove.
+                </p>
                 <div className="mt-2 flex justify-center gap-4">
                     <a href="https://www.kongesque.com/" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary hover:underline transition-colors">Author</a>
                     <a href="https://github.com/Kongesque/flow-free-solver" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary hover:underline transition-colors">GitHub</a>
