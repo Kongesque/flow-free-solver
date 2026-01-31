@@ -13,6 +13,7 @@ export default defineConfig({
     base: process.env.GITHUB_ACTIONS ? '/flow-free-solver/' : '/',
     build: {
         outDir: 'dist',
+        sourcemap: false,
     },
     server: {
         open: true,

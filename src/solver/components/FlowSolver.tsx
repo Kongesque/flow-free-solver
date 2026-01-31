@@ -189,10 +189,26 @@ const FlowSolver = () => {
 
 
 
+    const workerRef = useRef<Worker | null>(null);
+
+    // Cleanup worker on unmount
+    useEffect(() => {
+        return () => {
+            if (workerRef.current) {
+                workerRef.current.terminate();
+            }
+        };
+    }, []);
+
     const solveBoard = async () => {
         // Clear any previous error and set loading
         setError(null);
         setIsSolving(true);
+
+        // Terminate existing worker if any
+        if (workerRef.current) {
+            workerRef.current.terminate();
+        }
 
         // Use Web Worker to run solver in background thread
         // This keeps CSS animations responsive
@@ -200,6 +216,7 @@ const FlowSolver = () => {
             new URL('../workers/solver.worker.ts', import.meta.url),
             { type: 'module' }
         );
+        workerRef.current = worker;
 
         const startTime = performance.now();
 
@@ -208,6 +225,7 @@ const FlowSolver = () => {
         worker.onmessage = (event) => {
             const result = event.data;
             setIsSolving(false);
+            workerRef.current = null;
             worker.terminate();
 
             if (result.board) {
@@ -242,6 +260,8 @@ const FlowSolver = () => {
             setIsSolving(false);
             setError('Solver error');
             setTimeout(() => setError(null), 3000);
+            setTimeout(() => setError(null), 3000);
+            workerRef.current = null;
             worker.terminate();
         };
     };

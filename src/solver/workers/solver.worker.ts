@@ -95,6 +95,12 @@ async function solveHeuristicBFS(board: number[][]): Promise<any> {
 self.onmessage = async (event: MessageEvent<{ board: number[][], type: 'astar' | 'z3' | 'heuristic_bfs' }>) => {
     const { board, type } = event.data;
 
+    if (!Array.isArray(board) || board.length === 0 || !Array.isArray(board[0])) {
+        self.postMessage({ board: null, timedOut: false, error: 'Invalid board format', timeTaken: 0, nodeCount: 0 });
+        return;
+    }
+
+
     try {
         if (type === 'z3') {
             const result = await solveZ3(board);
