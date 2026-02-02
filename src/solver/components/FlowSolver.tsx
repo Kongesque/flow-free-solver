@@ -378,7 +378,7 @@ const FlowSolver = () => {
                 <div className="flex flex-wrap items-center justify-center gap-3 mb-2">
                     <div className="relative">
                         <select
-                            className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                            className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none rounded-md'
                             value={size}
                             onChange={handleSizeChange}
                             aria-label="Grid Size"
@@ -392,7 +392,7 @@ const FlowSolver = () => {
 
                     <div className="relative">
                         <select
-                            className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none'
+                            className='h-9 sm:h-10 pl-3 pr-7 text-xs border border-stoic-line bg-stoic-bg text-stoic-primary uppercase tracking-wide focus:outline-none focus:border-stoic-accent cursor-pointer appearance-none rounded-md'
                             value={solverType}
                             onChange={(e) => {
                                 const newType = e.target.value as 'astar' | 'z3' | 'heuristic_bfs';
@@ -415,7 +415,7 @@ const FlowSolver = () => {
                     </div>
 
                     <button
-                        className='h-9 sm:h-10 px-4 text-xs border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg select-none flex items-center gap-2'
+                        className='h-9 sm:h-10 px-4 text-xs border-2 border-stoic-accent bg-stoic-accent text-stoic-bg font-bold uppercase tracking-wider hover:bg-transparent hover:text-stoic-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stoic-accent disabled:hover:text-stoic-bg select-none flex items-center gap-2 rounded-md'
                         onClick={solveBoard}
                         disabled={isSolving}
                     >
@@ -429,7 +429,7 @@ const FlowSolver = () => {
                     </button>
 
                     <button
-                        className='h-9 sm:h-10 px-3 text-xs border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors select-none'
+                        className='h-9 sm:h-10 px-3 text-xs border border-stoic-line bg-transparent text-stoic-secondary uppercase tracking-wider hover:border-stoic-secondary hover:text-stoic-primary transition-colors select-none rounded-md'
                         onClick={() => resetBoard()}
                     >
                         Reset
@@ -446,10 +446,8 @@ const FlowSolver = () => {
                 <p className="mt-2">
                     <strong className="text-stoic-secondary">Tips:</strong>  Click to place endpoints, click again to remove.
                 </p>
-                <div className="mt-2 flex justify-center gap-4">
-                    <a href="https://www.kongesque.com/" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary hover:underline transition-colors">Author</a>
-                    <a href="https://github.com/Kongesque/flow-free-solver" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary hover:underline transition-colors">GitHub</a>
-                    <a href="https://en.wikipedia.org/wiki/Numberlink" target="_blank" rel="noopener noreferrer nofollow" className="hover:text-stoic-primary hover:underline transition-colors">Wikipedia</a>
+                <div className="mt-4 flex justify-center gap-2">
+                    <a href="https://github.com/Kongesque/flow-free-solver" target="_blank" rel="noopener noreferrer" className="hover:text-stoic-primary underline transition-colors uppercase">Source Code</a>
                 </div>
             </footer>
         </main>
