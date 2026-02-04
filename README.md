@@ -31,6 +31,14 @@ Try it online: **[https://flow.kongesque.com](https://flow.kongesque.com)**
 | [A* Search Algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm) | Heuristic Search | Pathfinding with Manhattan distance heuristic and lookahead pruning |
 | [Heuristic BFS](https://mzucker.github.io/2016/08/28/flow-solver.html) | Algorithm Search | Optimized C implementation of Breadth-First Search with domain-specific heuristics by [Matt Zucker](https://mzucker.github.io/), compiled to WebAssembly |
 
+### 📊 Algorithm Comparison
+
+| Algorithm | Implementation | Best For | Grid Size | Speed | Memory Usage |
+|-----------|----------------|----------|-----------|-------|--------------|
+| Heuristic BFS | C + WebAssembly | Real-time solving, interactive use | 5×5 - 14×14 | ⚡ Fastest | Low |
+| SAT (Z3) | Z3 + WebAssembly | Guaranteed solutions, verification | 5×5 - 15×15 | 🐢 Slow | High |
+| A* Search | Pure TypeScript | Learning, debugging, small puzzles | 5×5 - 10×10 | 🚶 Moderate | Medium |
+
 ## ✨ Key Features
 
 - **Instant AI Solutions**: Solves complex Number Link puzzles in milliseconds using the Z3 SMT Solver (compiled to Wasm).
