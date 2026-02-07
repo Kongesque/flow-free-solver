@@ -274,7 +274,10 @@ const FlowSolver = () => {
         <main className='flex flex-col justify-center items-center h-[100dvh] w-full bg-stoic-bg safe-area-inset touch-manipulation overflow-hidden gap-3'>
             {/* Header with clear hierarchy */}
             <header className='text-center flex flex-col items-center gap-1 selectable-text shrink-0 mb-2'>
-                <h1 className='text-stoic-primary text-xl sm:text-2xl md:text-3xl uppercase tracking-[0.2em] font-bold'>
+                <h1
+                    className='text-stoic-primary text-xl sm:text-2xl md:text-3xl uppercase tracking-[0.2em] font-bold'
+                    style={{ fontFamily: 'Geist Pixel Circle' }}
+                >
                     Flow Free Solver
                 </h1>
             </header>

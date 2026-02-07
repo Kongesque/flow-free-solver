@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@vercel/analytics": "^1.6.1",
     "coi-serviceworker": "^0.1.7",
+    "geist": "^1.7.0",
     "lucide-react": "^0.563.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
