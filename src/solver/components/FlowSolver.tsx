@@ -275,7 +275,7 @@ const FlowSolver = () => {
             {/* Header with clear hierarchy */}
             <header className='text-center flex flex-col items-center gap-1 selectable-text shrink-0 mb-2'>
                 <h1
-                    className='text-stoic-primary text-xl sm:text-2xl md:text-3xl uppercase tracking-[0.2em] font-bold'
+                    className='text-stoic-primary text-xl sm:text-2xl md:text-3xl lg:text-4xl uppercase tracking-[0.1em]'
                     style={{ fontFamily: 'Geist Pixel Circle' }}
                 >
                     Flow Free Solver
